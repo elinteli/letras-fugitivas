@@ -35,7 +35,7 @@ export default function Tienda({ alerta, cambiarFondo }) {
         }
         return (
             <div className="purchase-card" onClick={alApretarBtn}>
-                <img className="purchase-card__img" src={images[imageName]} />
+                <img className="purchase-card__img" src={images[imageName]} alt="imagen con objeto/s adquirible/s"/>
                 <span className="purchase-card__info">{amount} {nameInUpperCase}S</span>
                 <div className={`purchase-card__btn${mostrarIconoMoneda}`}>{price}</div>
             </div>
@@ -58,7 +58,7 @@ export default function Tienda({ alerta, cambiarFondo }) {
             if (!bgStatus) { //Si esta bloqueado
                 const mensaje = (
                     `¿Querés comprar este fondo?<br/>
-                    <img class="alerta__img" src=${images[identificadorFondo + ".jpg"]} /><br/>
+                    <img class="alerta__img" src=${images[identificadorFondo + ".jpg"]} alt="imagen de fondo"/><br/>
                     <div class="alerta__cont-btns">
                         <div id='comprar-fondo-alerta' class='alerta__btn'>
                             ${price}
@@ -103,7 +103,7 @@ export default function Tienda({ alerta, cambiarFondo }) {
         return (
             <div id={"btn-fondo-"+identificadorFondo} className={`cont-fondos__fondo${cssModifier}`} onClick={alApretarBtnFondo}>
                 <picture className="cont-fondos__cont-img">
-                    <img className="cont-fondos__img" src={images[identificadorFondo + ".jpg"]} />
+                    <img className="cont-fondos__img" src={images[identificadorFondo + ".jpg"]} alt="imagen de fondo"/>
                 </picture>
                 <div className="cont-fondos__info">{price}</div>
             </div>

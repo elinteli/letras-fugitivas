@@ -7,7 +7,7 @@ export default function Inicio({ alerta }) {
   useEffect(() => {
     let nombreDeUsuario = localStorage.getItem("nombreUsuarioLF");
     let fotoPerfil = localStorage.getItem("ftPerfilLF");
-    const selectorFtPrfl = `<div class="selectorFotoPerfil" id="selectorFotoPerfil"> <label> <input checked class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="pinguino"> <img class="imgSelectorFtPrfl" src=${images["pinguino.png"]}> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="leon"> <img class="imgSelectorFtPrfl" src=${images["leon.png"]}> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="tortuga"> <img class="imgSelectorFtPrfl" src=${images["tortuga.png"]}> </label> <br> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="ballena"> <img class="imgSelectorFtPrfl" src=${images["ballena.png"]}> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="buho"> <img class="imgSelectorFtPrfl" src=${images["buho.png"]}> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="abeja"> <img class="imgSelectorFtPrfl" src=${images["abeja.png"]}> </label> </div>`;
+    const selectorFtPrfl = `<div class="selectorFotoPerfil" id="selectorFotoPerfil"> <label> <input checked class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="pinguino"> <img class="imgSelectorFtPrfl" src=${images["pinguino.png"]} alt="pinguino"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="leon"> <img class="imgSelectorFtPrfl" src=${images["leon.png"]} alt="león"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="tortuga"> <img class="imgSelectorFtPrfl" src=${images["tortuga.png"]} alt="tortuga"> </label> <br> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="ballena"> <img class="imgSelectorFtPrfl" src=${images["ballena.png"]} alt="ballena"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="buho"> <img class="imgSelectorFtPrfl" src=${images["buho.png"]} alt="buho"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="abeja"> <img class="imgSelectorFtPrfl" src=${images["abeja.png"]} alt="abeja"> </label> </div>`;
 
     if (fotoPerfil == "transparente") {
       document.querySelector("#body").className = 'efectoPantallaColor';
@@ -130,7 +130,7 @@ export default function Inicio({ alerta }) {
 
       <div className="info-usr"> {/*INFORMACIÓN DEL USUARIO*/}
         <br /><br /><br />
-        <img className="info-usr__ft" src={images["transparente.png"]} />
+        <img className="info-usr__ft" src={images["transparente.png"]} alt="foto de perfil"/>
         <p className="info-usr__nmbr">Jugador</p>
         <p className="info-usr__record--clasico">Récord Clásico:<br />{localStorage.getItem("clasicoLF")}</p>
         <p className="info-usr__record--experto">Récord Experto:<br />{localStorage.getItem("expertoLF")}</p>

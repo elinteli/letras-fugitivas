@@ -15,8 +15,8 @@ export default function App() {
 
   function cambiarFondo(fondoNum, guardarFondoLocStor = true) {
     document.body.style.background = `url(${images[`${fondoNum}.jpg`]}) 0% 0% / auto 100vh fixed`;
-    document.querySelector("#body").style.backdropFilter = fondoNum == 0 ? 'none' : "blur(3px)";
-    document.body.style.backgroundSize = fondoNum == 0 ? '60px' : "auto 100vh";
+    document.querySelector("#body").style.backdropFilter = (fondoNum == 0 ? 'none' : "blur(3px)");
+    document.body.style.backgroundSize = (fondoNum == 0 ? '60px' : "auto 100vh");
     if (guardarFondoLocStor) {
       localStorage.setItem("fondoLF", fondoNum);
     }
@@ -51,7 +51,7 @@ export default function App() {
     setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
     const diarioLF = localStorage.getItem("diarioLF");
     const fechaActual = (new Date()).toLocaleDateString();
-    if (!diarioLF || JSON.parse(diarioLF)[0] != fechaActual) {
+    if (!diarioLF || (JSON.parse(diarioLF)[0] != fechaActual)) {
       setLocalStorage("diarioLF", JSON.stringify([fechaActual, false]));
     }
   }
