@@ -47,8 +47,6 @@ export default function App() {
     setLocalStorage("clasicoLF", 0);
     setLocalStorage("expertoLF", 0);
     setLocalStorage("helanteLF", 5);
-    setLocalStorage("ftPerfilLF", "transparente");
-    setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
     const diarioLF = localStorage.getItem("diarioLF");
     const fechaActual = (new Date()).toLocaleDateString();
     if (!diarioLF || (JSON.parse(diarioLF)[0] != fechaActual)) {
@@ -56,7 +54,9 @@ export default function App() {
     }
   }
   function setLocalStorage(nombre, defaultValue) {
-    localStorage.setItem(nombre, getLocalStorage(nombre, defaultValue));
+    let valor = getLocalStorage(nombre, defaultValue);
+    localStorage.setItem(nombre, valor);
+    return valor;
     /*Recupera el valor del item solicitado y si este no existe asigna el valor por defecto*/
   }
   function getLocalStorage(nombre, valorPorDefecto) {
@@ -69,10 +69,10 @@ export default function App() {
     <div id='body'>
       <BrowserRouter>
         <Routes>
-          <Route path="/menu/:pagina" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} />} />
+          <Route path="/menu/:pagina" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} setLocalStorage={setLocalStorage}/>} />
           <Route path="/juego/:modoJuego" element={<Juego alerta={alerta} />} />
           <Route path="/info" element={<Info alerta={alerta} />} />
-          <Route path="*" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} />} />
+          <Route path="*" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} setLocalStorage={setLocalStorage}/>} />
         </Routes>
       </BrowserRouter>
 

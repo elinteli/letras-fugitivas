@@ -3,10 +3,10 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import images from './utils/importImages';
 
-export default function Inicio({ alerta }) {
+export default function Inicio({ alerta, setLocalStorage }) {
   useEffect(() => {
-    let nombreDeUsuario = localStorage.getItem("nombreUsuarioLF");
-    let fotoPerfil = localStorage.getItem("ftPerfilLF");
+    let nombreDeUsuario = setLocalStorage("ftPerfilLF", "transparente");
+    let fotoPerfil = setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
     const selectorFtPrfl = `<div class="selectorFotoPerfil" id="selectorFotoPerfil"> <label> <input checked class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="pinguino"> <img class="imgSelectorFtPrfl" src=${images["pinguino.png"]} alt="pinguino"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="leon"> <img class="imgSelectorFtPrfl" src=${images["leon.png"]} alt="león"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="tortuga"> <img class="imgSelectorFtPrfl" src=${images["tortuga.png"]} alt="tortuga"> </label> <br> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="ballena"> <img class="imgSelectorFtPrfl" src=${images["ballena.png"]} alt="ballena"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="buho"> <img class="imgSelectorFtPrfl" src=${images["buho.png"]} alt="buho"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="abeja"> <img class="imgSelectorFtPrfl" src=${images["abeja.png"]} alt="abeja"> </label> </div>`;
 
     if (fotoPerfil == "transparente") {
@@ -130,7 +130,7 @@ export default function Inicio({ alerta }) {
 
       <div className="info-usr"> {/*INFORMACIÓN DEL USUARIO*/}
         <br /><br /><br />
-        <img className="info-usr__ft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAANSURBVBhXY2BgYGAAAAAFAAGKM+MAAAAAAElFTkSuQmCC" alt="foto de perfil" />
+        <img className="info-usr__ft" src={images["transparente.png"]} alt="foto de perfil"/>
         <p className="info-usr__nmbr">Jugador</p>
         <p className="info-usr__record--clasico">Récord Clásico:<br />{localStorage.getItem("clasicoLF")}</p>
         <p className="info-usr__record--experto">Récord Experto:<br />{localStorage.getItem("expertoLF")}</p>

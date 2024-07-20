@@ -4,7 +4,7 @@ import Inicio from './Inicio';
 import Tienda from './Tienda';
 import DesafioDiario from './DesafioDiario';
 
-export default function Menu({ alerta, cambiarFondo }) {
+export default function Menu({ alerta, cambiarFondo, setLocalStorage }) {
   let { pagina } = useParams();
 
   function Pagina() {
@@ -13,7 +13,7 @@ export default function Menu({ alerta, cambiarFondo }) {
     } else if (pagina === "tienda") {
       return <Tienda alerta={alerta} cambiarFondo={cambiarFondo} />;
     }
-    return <Inicio alerta={alerta} />;
+    return <Inicio alerta={alerta} setLocalStorage={setLocalStorage} />;
   }
 
   return (
