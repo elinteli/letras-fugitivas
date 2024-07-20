@@ -5,8 +5,8 @@ import images from './utils/importImages';
 
 export default function Inicio({ alerta, setLocalStorage }) {
   useEffect(() => {
-    let nombreDeUsuario = setLocalStorage("ftPerfilLF", "transparente");
-    let fotoPerfil = setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
+    let fotoPerfil = setLocalStorage("ftPerfilLF", "transparente");
+    let nombreDeUsuario = setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
     const selectorFtPrfl = `<div class="selectorFotoPerfil" id="selectorFotoPerfil"> <label> <input checked class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="pinguino"> <img class="imgSelectorFtPrfl" src=${images["pinguino.png"]} alt="pinguino"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="leon"> <img class="imgSelectorFtPrfl" src=${images["leon.png"]} alt="león"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="tortuga"> <img class="imgSelectorFtPrfl" src=${images["tortuga.png"]} alt="tortuga"> </label> <br> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="ballena"> <img class="imgSelectorFtPrfl" src=${images["ballena.png"]} alt="ballena"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="buho"> <img class="imgSelectorFtPrfl" src=${images["buho.png"]} alt="buho"> </label> <label> <input class="radioInputFtPrfl" type="radio" name="selectorFotoPerfil" value="abeja"> <img class="imgSelectorFtPrfl" src=${images["abeja.png"]} alt="abeja"> </label> </div>`;
 
     if (fotoPerfil == "transparente") {
