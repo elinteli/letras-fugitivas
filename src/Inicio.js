@@ -130,7 +130,7 @@ export default function Inicio({ alerta }) {
 
       <div className="info-usr"> {/*INFORMACIÓN DEL USUARIO*/}
         <br /><br /><br />
-        <img className="info-usr__ft" src={images["transparente.png"]} alt="foto de perfil"/>
+        <img className="info-usr__ft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/ezVsg4AAAAASUVORK5CYII=" alt="foto de perfil" />
         <p className="info-usr__nmbr">Jugador</p>
         <p className="info-usr__record--clasico">Récord Clásico:<br />{localStorage.getItem("clasicoLF")}</p>
         <p className="info-usr__record--experto">Récord Experto:<br />{localStorage.getItem("expertoLF")}</p>
