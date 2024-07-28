@@ -99,7 +99,7 @@ html {
 
 .cont-inicio {
   display: grid;
-  margin: auto;
+  margin: 0;
   width: 100vw;
   height: 90vh;
   grid-template-columns: 33vw 33vw 3vw 15vw 15vw;
@@ -1299,6 +1299,78 @@ h3 {
 
 .modoexperto::after {
   content: "EXPERTO";
+}
+
+@media screen and (orientation: landscape) {
+.cont-botones__deco {
+  display: none;
+}
+.info-usr, .cont-botones {
+  grid-row: 3 / 5;
+}
+.info-usr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  margin-bottom: 20vh;
+}
+.info-usr__ft {
+  width: 25vh;
+}
+.info-usr__nmbr, .info-usr__record--clasico, .info-usr__record--experto {
+  font-size: min(1.7vw,3.5vh);
+}
+.cont-inicio__btn, .cont-inicio__btn--conf, .cont-inicio__btn--info {
+  width: 5vw;
+  height: 5vw;
+}
+.cont-inicio__btn::before, .cont-inicio__btn--conf::before, .cont-inicio__btn--info::before,
+.menu-inf__diario, .menu-inf__inicio, .menu-inf__tienda, .menu-inf__diario--activo, .menu-inf__inicio--activo, .menu-inf__tienda--activo {
+  font-size: 2.5vw;
+}
+.cont-botones__btn--experto::after, .cont-botones__btn--clasico::after {
+  font-size: 3vw;
+}
+.cont-inicio__titulo {
+  font-size: min(13vh, 20vw);
+}
+.cont-inicio__btn--info {
+  margin: 0 14vw;
+}
+.cont-inicio__btn--conf {
+  margin: 0 5vw;
+}
+.cont-botones {
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cont-botones__btn--clasico::before, .cont-botones__btn--experto::before {
+  font-size: 5vh;
+}
+.cont-botones__btn--clasico, .cont-botones__btn--experto {
+  height: 0;
+  width: 100%;
+  margin: min(3vh,3vw);
+}
+.cont-inicio, .cont-inicio--tienda, .cont-juego--diario {
+  height: 86vh;
+}
+.menu-inf, .menu-inf--inicio, .menu-inf--tienda, .menu-inf--diario {
+  height: 11vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.cont-botones__btn--clasico {
+  margin-top: 0;
+}
+.teclado {
+  display: none;
+}
 }
 
 @font-face {

@@ -124,12 +124,11 @@ export default function Inicio({ alerta, setLocalStorage }) {
   })
   return (
     <div className="cont-inicio"> {/*CONTENEDOR PRINCIPAL*/}
-      <h1 className="cont-inicio__titulo">Letras<br />Fugitivas</h1>
+      <h1 className="cont-inicio__titulo">Letras Fugitivas</h1>
       <Link to="/info" className="cont-inicio__btn--info"></Link>
       <div className="cont-inicio__btn--conf"></div>
 
       <div className="info-usr"> {/*INFORMACIÓN DEL USUARIO*/}
-        <br /><br /><br />
         <img className="info-usr__ft" src={images["transparente.png"]} alt="foto de perfil"/>
         <p className="info-usr__nmbr">Jugador</p>
         <p className="info-usr__record--clasico">Récord Clásico:<br />{localStorage.getItem("clasicoLF")}</p>
