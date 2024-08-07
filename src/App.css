@@ -699,6 +699,8 @@ h1 {
 
 .cont-cred {
   display: flex;
+  flex-direction: column;
+  gap: 3vw;
   font-size: 5vw;
   padding: 2vh 5vw;
   width: 80vw;
@@ -714,18 +716,10 @@ h1 {
 .cont-cred__ppal,
 .cont-cred__ppal--1ero,
 .cont-cred__ppal--ult {
-  font-size: 7vw;
+  font-size: 6vw;
   font-weight: bold;
   margin: 0;
   color: #45200e;
-}
-
-.cont-cred__ppal--1ero {
-  margin-top: 9.31vw;
-}
-
-.cont-cred__ppal--ult {
-  margin-bottom: 9.31vw;
 }
 
 .cont-cred__enlace {
@@ -1322,12 +1316,16 @@ h3 {
 .info-usr__nmbr, .info-usr__record--clasico, .info-usr__record--experto {
   font-size: min(1.7vw,3.5vh);
 }
-.cont-inicio__btn, .cont-inicio__btn--conf, .cont-inicio__btn--info {
+.cont-inicio__btn, .cont-inicio__btn--conf, .cont-inicio__btn--info, .cont-info__btn {
   width: 5vw;
   height: 5vw;
 }
+.cont-info__btn {
+  margin: 10px 4vw;
+}
 .cont-inicio__btn::before, .cont-inicio__btn--conf::before, .cont-inicio__btn--info::before,
-.menu-inf__diario, .menu-inf__inicio, .menu-inf__tienda, .menu-inf__diario--activo, .menu-inf__inicio--activo, .menu-inf__tienda--activo {
+.menu-inf__diario, .menu-inf__inicio, .menu-inf__tienda, .menu-inf__diario--activo, .menu-inf__inicio--activo, .menu-inf__tienda--activo,
+.cont-info__btn::before {
   font-size: 2.5vw;
 }
 .cont-botones__btn--experto::after, .cont-botones__btn--clasico::after {
@@ -1370,6 +1368,19 @@ h3 {
 }
 .teclado {
   display: none;
+}
+.cont-cred {
+  font-size: 1.5vw;
+  padding-bottom: 4vw;
+}
+
+.cont-cred__ppal,
+.cont-cred__ppal--1ero,
+.cont-cred__ppal--ult {
+  font-size: 2vw;
+}
+.cont-cred__sec {
+  width: 50%;
 }
 }
 
