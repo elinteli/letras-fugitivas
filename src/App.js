@@ -102,8 +102,10 @@ export default function App() {
         <div className="config__seccion" id="seccion-config-prfl">
           <span className="config__icono--usr"></span>
           <span className="config__nmbr">Perfil</span>
+          <div className="config__cont-btn">
           <button className="config__btn config__btn--nmbr-prfl">Cambiar Nombre</button>
           <button className="config__btn config__btn--ft-prfl">Cambiar Foto</button>
+          </div>
         </div>
         <div className="config__seccion" id="seccion-config-borrar-dts">
           <span className="config__icono--basura"></span>

@@ -1295,6 +1295,11 @@ h3 {
   content: "EXPERTO";
 }
 
+.config__cont-btn {
+  display: flex;
+  flex-direction: column;
+}
+
 @media screen and (orientation: landscape) {
 .cont-botones__deco {
   display: none;
@@ -1320,12 +1325,19 @@ h3 {
   width: 5vw;
   height: 5vw;
 }
+.config__btn {
+  height: 5vw;
+  margin: 2vw;
+}
+.config__cont-btn {
+  flex-direction: row;
+}
 .cont-info__btn {
   margin: 10px 4vw;
 }
 .cont-inicio__btn::before, .cont-inicio__btn--conf::before, .cont-inicio__btn--info::before,
 .menu-inf__diario, .menu-inf__inicio, .menu-inf__tienda, .menu-inf__diario--activo, .menu-inf__inicio--activo, .menu-inf__tienda--activo,
-.cont-info__btn::before {
+.cont-info__btn::before, .config__btn {
   font-size: 2.5vw;
 }
 .cont-botones__btn--experto::after, .cont-botones__btn--clasico::after {
@@ -1381,6 +1393,32 @@ h3 {
 }
 .cont-cred__sec {
   width: 50%;
+}
+.config {
+  top: 5vh;
+  padding-bottom: min(3vw,7vh);
+  height: 80vh;
+}
+.config__titulo {
+  font-size: 3vw;
+  margin-bottom: 1.5vw;
+}
+.config__seccion {
+  font-size: 2.5vw;
+  padding: 1.5vw;
+}
+.config__btn-cerrar {
+  font-size: 3vw;
+  top: -1vw;
+  margin: 0;
+}
+.config__marcar {
+  width: 2.5vw;
+  height: 2.5vw;
+}
+.config__input--volumen:checked + div {
+  left: -15vw;
+  top: -15vw;
 }
 }
 
