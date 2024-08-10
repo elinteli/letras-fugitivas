@@ -954,7 +954,6 @@ h3 {
   top: calc(50% - 5vw);
   border-radius: 100%;
   padding: 1vw; 
-  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 .titulo__btn--monedas::before,
@@ -1318,12 +1317,21 @@ h3 {
 .info-usr__ft {
   width: 25vh;
 }
-.info-usr__nmbr, .info-usr__record--clasico, .info-usr__record--experto {
+.info-usr__nmbr, .info-usr__record--clasico, .info-usr__record--experto, .menu-sup__valor--hel, .menu-sup__valor--cam, .menu-sup__valor--mon {
   font-size: min(1.7vw,3.5vh);
+}
+.cont-inicio--tienda {
+  grid-template-rows: min(8.5vh, 4.5vw) 1fr;
 }
 .cont-inicio__btn, .cont-inicio__btn--conf, .cont-inicio__btn--info, .cont-info__btn {
   width: 5vw;
   height: 5vw;
+}
+.titulo__btn--monedas, .titulo__btn--cambios, .titulo__btn--helantes, .titulo__btn--fondos {
+  width: min(5vw,9vh);
+  height: min(5vw,9vh);
+  padding: 0;
+  top: calc(50% - 2.5vw)
 }
 .config__btn {
   height: 5vw;
@@ -1339,6 +1347,13 @@ h3 {
 .menu-inf__diario, .menu-inf__inicio, .menu-inf__tienda, .menu-inf__diario--activo, .menu-inf__inicio--activo, .menu-inf__tienda--activo,
 .cont-info__btn::before, .config__btn {
   font-size: 2.5vw;
+}
+.titulo__btn--monedas::before, .titulo__btn--cambios::before, .titulo__btn--helantes::before, .titulo__btn--fondos::before {
+  font-size: 2.5vw;
+}
+.menu-sup__icon--mon, .menu-sup__icon--cam, .menu-sup__icon--hel {
+  width: 2vw;
+  height: 2vw;
 }
 .cont-botones__btn--experto::after, .cont-botones__btn--clasico::after {
   font-size: 3vw;
@@ -1419,6 +1434,70 @@ h3 {
 .config__input--volumen:checked + div {
   left: -15vw;
   top: -15vw;
+}
+.purchase-card {
+  width: 20vw;
+  height: calc(20vw * 1.39534883721);
+}
+.cont-fondos__fondo, .cont-fondos__fondo--selcc, .cont-fondos__fondo--blkdo {
+  width: 18vw;
+  height: 18vw;
+  border-radius: 10px;
+}
+.cont-fondos__img, .alerta__img {
+  width: calc(18vw *0.767441860465);
+  height: calc(18vw *0.767441860465);
+}
+.alerta__img {
+  border-width: .8vw;
+}
+.alerta__cont-btns .alerta__btn {
+  margin: 5px 20px;
+}
+.alerta__cont-btns {
+  justify-content: center;
+}
+.purchase-card__img {
+  width: calc(20vw * 0.813953488373);
+  height: calc(20vw * 0.813953488373);
+}
+.purchase-card__info {
+  font-size: 2vw;
+}
+.purchase-card__btn, .purchase-card__btn--money-icon {
+  font-size: 2.5vw;
+  border-radius: 10px;
+}
+.purchase-card__btn--money-icon {
+  max-width: 35%;
+}
+.cont-fondos__info {
+  font-size: 1.8vw;
+}
+.cont-fondos__info::after {
+  margin-left: 1vw;
+  margin-right: -.5vw;
+}
+.cont-fondos__fondo--selcc .cont-fondos__cont-img::before {
+  font-size: 2.5vw;
+}
+.cont-fondos__fondo--selcc .cont-fondos__cont-img::after {
+  width: 2.3vw;
+  height: 2.3vw;
+}
+.menu-sup__icon--mon, .purchase-card__btn--money-icon::before, .menu-sup__icon--cam, .menu-sup__icon--hel, .cont-fondos__info::after {
+  width: 1.5vw;
+  height: 1.5vw;
+}
+.alerta__moneda {
+  width: 2vw;
+  height: 2vw;
+}
+.alerta__usd::before, .alerta__moneda {
+  margin-right: 0;
+}
+.menu-sup__icon--mon, .menu-sup__icon--cam, .menu-sup__icon--hel {
+  margin-left: 2vw;
 }
 }
 
