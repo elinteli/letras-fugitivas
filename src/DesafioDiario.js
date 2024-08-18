@@ -12,7 +12,7 @@ export default function DesafioDiario({ alerta }) {
    let diario = JSON.parse(localStorage.getItem("diarioLF"));
    const generadorNumAleat = seedrandom(diario[0]);
    document.querySelector(":root").style.setProperty("--content-fecha-checkbox", `var(--caracter-checkbox-${diario[1]})`);
-   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"];
+   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p","br", "a", "s", "d", "f", "g", "h", "j", "k", "l","br", "z", "x", "c", "v", "b", "n", "m"];
    const letras = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"];
    const modoJuegoEsClasico = false;
    let volumenSnd = JSON.parse(localStorage.getItem("sonidoLF"));
@@ -31,9 +31,13 @@ export default function DesafioDiario({ alerta }) {
          }
       }
       return (<div className="teclado" onClick={alApretarTeclado}>
-         {qwerty.map((letra, index) => (
-            <div key={index} className="teclado__letra">{letra}</div>
-         ))}
+         {qwerty.map((letra, index) => {
+            if (letra !== "br") {
+               return <div key={index} className="teclado__letra">{letra}</div>;
+            } else {
+               return <br key={index} />;
+            }
+         })}
       </div>);
    }
    // function setPalabras() {
@@ -162,12 +166,24 @@ export default function DesafioDiario({ alerta }) {
       if (JSON.parse(diario[1])) {
          mostrarSolucion(letraSolucion);
       }
+
+      document.addEventListener("keydown", (ev) => {
+         const letraApretada = ev.key+"";
+         if (qwerty.includes(letraApretada)){
+            const letraClicada = Array.from(document.querySelectorAll(".teclado__letra"))
+                     .filter(element => element.innerHTML == letraApretada);
+               listaLetrasSelec.push(letraClicada[0]);
+               verificarRespuesta(letraApretada);
+         }
+       });
    })
    return (
       <div className="cont-juego--diario"> {/*CONTENEDOR PRINCIPAL*/}
          <div className="cont-juego__contenido">
+            <div className='cont-juego__info'>
             <div className="cont-juego__titulo">Desafio Diario</div> {/*TÍTULO*/}
             <div className="cont-juego__fecha">{diario[0]}</div> {/*FECHA*/}
+            </div>
             <br />
             <Tabla />
             <br /><br />

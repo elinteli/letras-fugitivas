@@ -50,7 +50,7 @@ a {
   background-attachment: fixed;
   top: 0;
   height: 100vh;
-  overflow: scroll;
+  overflow: auto;
   /* transition: top 1.2s ease; */
 }
 
@@ -970,6 +970,9 @@ h3 {
   width: 100vw;
   padding-bottom: 5vh;
 }
+.cont-juego__contenido {
+  width: 100%;
+}
 
 .cont-botones__btn--clasico::before,
 .cont-botones__btn--experto::before {
@@ -1300,6 +1303,17 @@ h3 {
 }
 
 @media screen and (orientation: landscape) {
+  .teclado {
+    width: 100vw;
+    padding: 1vh 0;
+    padding-bottom: 1.5vh;
+  }
+  .teclado__letra {
+    font-size: calc(1.5vw / 1.5);
+    width: calc(5vw / 1.5);
+    padding:  calc(1vw / 1.5) 0;
+    margin: min(.7vh,.5vw);
+  }
 .cont-botones__deco {
   display: none;
 }
@@ -1348,7 +1362,28 @@ h3 {
 .cont-info__btn::before, .config__btn {
   font-size: 2.5vw;
 }
-.titulo__btn--monedas::before, .titulo__btn--cambios::before, .titulo__btn--helantes::before, .titulo__btn--fondos::before {
+.tablero-info__cambio::after, .tablero-info__helante::after {
+  font-size: 1.5vw;
+  height: 1.6vw;
+  padding: .3vw .7vw;
+  left: -1vw;
+}
+.tablero-info__cambio::before {
+  content: "";
+  height: calc(9.5vw / 2.5);
+  width: calc(9.5vw / 2.5);  
+  background: url("./img/sprites.png") calc(-124.165vw / 2.5) calc(-89.205vw / 2.5);
+  background-size: calc(152.665vw / 2.5);
+}
+.tablero-info__helante::before {
+  content: "";
+  height: calc(9.5vw / 2.5);
+  width: calc(9.5vw / 2.5);  
+  background: url("./img/sprites.png")calc(-114.475vw / 2.5) calc(-89.205vw / 2.5);
+  background-size: calc(152.665vw / 2.5);
+}
+
+.titulo__btn--monedas::before, .titulo__btn--cambios::before, .titulo__btn--helantes::before, .tablero-info__helante::before, .tablero-info__config::before, .tablero-info__btn-inicio::before, .tablero-info__cambio::before {
   font-size: 2.5vw;
 }
 .menu-sup__icon--mon, .menu-sup__icon--cam, .menu-sup__icon--hel {
@@ -1360,6 +1395,69 @@ h3 {
 }
 .cont-inicio__titulo {
   font-size: min(13vh, 20vw);
+}
+.cont-juego__titulo {
+font-size: min(5vh, 7vw);
+width: calc(60vw - 30px);
+margin: 0;
+text-align: left;
+display: inline;
+padding-left: 5vw;
+border-radius: 10px 0 0 10px;
+box-shadow: none;
+}
+.tablero-info__pts-hist, .tablero-info__pts {
+font-size: min(5vh, 7vw);
+height: 10vh;
+}
+.tablero-info__pts {
+  grid-column: 3 / 4;
+  grid-row: 1;
+  border-radius: 10px 0 0 10px;
+}
+.tablero-info__pts-hist {
+  grid-column: 4 / 5;
+  grid-row: 1;
+  border-radius: 0 10px 10px 0;
+}
+.tablero-info {
+  width: 80vw;
+  grid-template-columns: 7vw 7vw 26vw 26vw 7vw 7vw;
+  grid-template-rows: 10vh;
+  gap: 0;
+  margin-bottom: 1vh;
+}
+
+.tablero-info__helante, .tablero-info__config, .tablero-info__btn-inicio, .tablero-info__cambio {
+  width: 5vw;
+  height: 10vh;
+}
+.tablero-info__helante, .tablero-info__cambio {
+  margin-left: auto;
+}
+.cont-juego__fecha, .cont-juego__fecha::after {
+  font-size: min(4vh, 6vw);
+}
+.cont-juego__fecha {
+  width: 20vw;
+  margin: 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: none;
+}
+.cont-juego__info {
+  display: flex;
+  height: 10vh;
+  margin: 2vh auto 0 auto;
+  width: 80vw;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}
+.tabla {
+  grid-template-rows: repeat(5, min(9vh, 11vw));
+}
+.tabla__palabra {
+  border-width: 0.2vw;
+  font-size: min(6vh, 7vw);
 }
 .cont-inicio__btn--info {
   margin: 0 14vw;
@@ -1383,7 +1481,11 @@ h3 {
   margin: min(3vh,3vw);
 }
 .cont-inicio, .cont-inicio--tienda, .cont-juego--diario {
-  height: 86vh;
+  height: 89vh;
+}
+.texto-puntos {
+  font-size: 3vw;
+  text-shadow: .2vw .2vw #45200e;
 }
 .menu-inf, .menu-inf--inicio, .menu-inf--tienda, .menu-inf--diario {
   height: 11vh;
@@ -1392,9 +1494,6 @@ h3 {
 }
 .cont-botones__btn--clasico {
   margin-top: 0;
-}
-.teclado {
-  display: none;
 }
 .cont-cred {
   font-size: 1.5vw;
@@ -1498,6 +1597,10 @@ h3 {
 }
 .menu-sup__icon--mon, .menu-sup__icon--cam, .menu-sup__icon--hel {
   margin-left: 2vw;
+}
+.modoclasico::after, .modoexperto::after {
+  font-size: 1.5vw;
+  bottom: 4vh;
 }
 }
 

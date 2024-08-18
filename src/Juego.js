@@ -12,7 +12,8 @@ export default function Juego({ alerta }) {
    let { modoJuego } = useParams();
    let seedrandom = require('seedrandom');
    const generadorNumAleat = seedrandom();
-   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"];
+   
+   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p","br", "a", "s", "d", "f", "g", "h", "j", "k", "l","br", "z", "x", "c", "v", "b", "n", "m"];
    const letras = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"];
    const modoJuegoEsClasico = modoJuego == "clasico";
    let tiempoPartida = modoJuegoEsClasico ? 7 : 10;
@@ -112,9 +113,13 @@ export default function Juego({ alerta }) {
          }
       }
       return (<div className="teclado" onClick={alApretarTeclado}>
-         {qwerty.map((letra, index) => (
-            <div key={index} className="teclado__letra">{letra}</div>
-         ))}
+         {qwerty.map((letra, index) => {
+            if (letra !== "br") {
+               return <div key={index} className="teclado__letra">{letra}</div>;
+            } else {
+               return <br key={index} />;
+            }
+         })}
       </div>);
    }
    function setPalabras() {
@@ -277,6 +282,15 @@ export default function Juego({ alerta }) {
             setTimeout(ocultarEfectoPantallaColor, 300);
          }
       }
+      document.addEventListener("keydown", (ev) => {
+         const letraApretada = ev.key+"";
+         if (qwerty.includes(letraApretada)){
+            const letraClicada = Array.from(document.querySelectorAll(".teclado__letra"))
+                     .filter(element => element.innerHTML == letraApretada);
+               listaLetrasSelec.push(letraClicada[0]);
+               verificarRespuesta(letraApretada);
+         }
+       });
    });
    function respuestaCorrecta(letra) {
       mostrarEfectoPantallaColor("verde");
