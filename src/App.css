@@ -1602,6 +1602,10 @@ height: 10vh;
   font-size: 1.5vw;
   bottom: 4vh;
 }
+.imgSelectorFtPrfl {
+  width: 12vw;
+  height: 12vw;
+}
 }
 
 @font-face {
