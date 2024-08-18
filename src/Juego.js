@@ -44,8 +44,8 @@ export default function Juego({ alerta }) {
 
       document.querySelector('.config__input--volumen').checked = JSON.parse(localStorage.getItem("sonidoLF"));
       document.querySelector('.config__input--volumen').addEventListener('change', function () {
+         localStorage.setItem("sonidoLF", volumenSnd);
          volumenSnd = document.querySelector('.config__input--volumen').checked;
-        localStorage.setItem("sonidoLF", volumenSnd);
       });
 
       document.querySelector('.config__btn--reiniciar').addEventListener('click', function () {
