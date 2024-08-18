@@ -42,9 +42,9 @@ export default function Juego({ alerta }) {
       document.querySelector("#body").className = 'efectoPantallaColor';
       document.querySelector(':root').style.setProperty('--color-efectopantalla', 'var(--efecto-pantalla-negro)');
 
-      document.querySelector('.config__input--volumen').checked = volumenSnd;
+      document.querySelector('.config__input--volumen').checked = !volumenSnd;
       document.querySelector('.config__input--volumen').addEventListener('change', function () {
-         volumenSnd = document.querySelector('.config__input--volumen').checked;
+         volumenSnd = !document.querySelector('.config__input--volumen').checked;
          localStorage.setItem("sonidoLF", volumenSnd);
       });
 
