@@ -581,7 +581,7 @@ h1 {
   transition: 300ms ease;
 }
 
-.config__input--volumen:checked + div {
+.config__input--volumen:not(:checked) + div {
   left: -10px;
   top: -10px;
 }
@@ -1530,7 +1530,7 @@ height: 10vh;
   width: 2.5vw;
   height: 2.5vw;
 }
-.config__input--volumen:checked + div {
+.config__input--volumen:not(:checked) + div {
   left: -15vw;
   top: -15vw;
 }
