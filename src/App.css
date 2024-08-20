@@ -1383,7 +1383,7 @@ h3 {
   background-size: calc(152.665vw / 2.5);
 }
 
-.titulo__btn--monedas::before, .titulo__btn--cambios::before, .titulo__btn--helantes::before, .tablero-info__helante::before, .tablero-info__config::before, .tablero-info__btn-inicio::before, .tablero-info__cambio::before {
+.titulo__btn--monedas::before, .titulo__btn--cambios::before, .titulo__btn--helantes::before, .titulo__btn--fondos::before ,.tablero-info__helante::before, .tablero-info__config::before, .tablero-info__btn-inicio::before, .tablero-info__cambio::before {
   font-size: 2.5vw;
 }
 .menu-sup__icon--mon, .menu-sup__icon--cam, .menu-sup__icon--hel {

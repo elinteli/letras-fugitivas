@@ -50,7 +50,7 @@ export default function App() {
     const diarioLF = localStorage.getItem("diarioLF");
     const fechaActual = (new Date()).toLocaleDateString();
     if (!diarioLF || (JSON.parse(diarioLF)[0] != fechaActual)) {
-      setLocalStorage("diarioLF", JSON.stringify([fechaActual, false]));
+      localStorage.setItem("diarioLF", JSON.stringify([fechaActual, false]));
     }
   }
   function setLocalStorage(nombre, defaultValue) {
