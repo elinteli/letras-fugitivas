@@ -7,18 +7,18 @@ import dicJsonRae from './resources/dicRAE.json';
 import bopAudio from './sounds/bop.wav';
 import gameBonusAudio from './sounds/game-bonus-144751.mp3';
 import errorAudio from './sounds/notification-sound-error-sound-effect-203788.mp3';
+import Configuracion from './config';
 
 export default function Juego({ alerta }) {
-   let { modoJuego } = useParams();
+   const { modoJuego } = useParams();
    let seedrandom = require('seedrandom');
    const generadorNumAleat = seedrandom();
-   
-   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p","br", "a", "s", "d", "f", "g", "h", "j", "k", "l","br", "z", "x", "c", "v", "b", "n", "m"];
+
+   const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "br", "a", "s", "d", "f", "g", "h", "j", "k", "l", "br", "z", "x", "c", "v", "b", "n", "m"];
    const letras = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"];
    const modoJuegoEsClasico = modoJuego == "clasico";
    let tiempoPartida = modoJuegoEsClasico ? 7 : 10;
    let tiempoRestante = tiempoPartida;
-   let volumenSnd = JSON.parse(localStorage.getItem("sonidoLF"));
    const bopEfectoSonido = new Audio(bopAudio);
    const acertarEfectoSonido = new Audio(gameBonusAudio);
    const acaboTiempoSonido = new Audio(errorAudio);
@@ -32,46 +32,36 @@ export default function Juego({ alerta }) {
    let recompenzaAcertar;
    let timerJuego;
    let configAbierto = false;
+   let vidas = 3;
+   const reiniciar = function () {
+      document.querySelector(".vida-3").style.color = "#eee4c3";
+      document.querySelector(".vida-2").style.color = "#eee4c3";
+      document.querySelector(".vida-1").style.color = "#eee4c3";
+      vidas = 3;
+      document.querySelector('.config').style.display = 'none';
+      document.querySelector("#body").className = '';
+      document.querySelector(':root').style.setProperty('--color-efectopantalla', 'transparent');
+      pausaTimer = false;
+      configAbierto = false;
 
+      tiempoPartida = modoJuegoEsClasico ? 7 : 10;
+      tiempoRestante = tiempoPartida;
+      listaLetrasSelec = []; //Lista de las letras que se seleccionaron
+      puntos = 0;
+      document.querySelector(".tablero-info__pts").innerHTML = puntos;
+      aciertos = 0;
+      setPalabras();
+   }
+   const cerrarConfig = function () {
+      ocultarEfectoPantallaColor();
+      pausaTimer = false;
+      configAbierto = false;
+   }
    function onClickBtnConfig() {
-      document.querySelector("#seccion-config-prfl").style.display = "none";      
-      document.querySelector('#seccion-config-reiniciar').style.display = "flex";
       pausaTimer = true;
       configAbierto = true;
       document.querySelector('.config').style.display = 'flex';
-      document.querySelector("#body").className = 'efectoPantallaColor';
-      document.querySelector(':root').style.setProperty('--color-efectopantalla', 'var(--efecto-pantalla-negro)');
-
-      document.querySelector('.config__input--volumen').checked = volumenSnd;
-      document.querySelector('.config__input--volumen').addEventListener('change', function () {
-         volumenSnd = document.querySelector('.config__input--volumen').checked;
-         localStorage.setItem("sonidoLF", volumenSnd);
-      });
-
-      document.querySelector('.config__btn--reiniciar').addEventListener('click', function () {
-         document.querySelector('.config').style.display = 'none';
-         document.querySelector("#body").className = '';
-         document.querySelector(':root').style.setProperty('--color-efectopantalla', 'transparent');
-         pausaTimer = false;
-         configAbierto = false;
-
-         tiempoPartida = modoJuegoEsClasico ? 7 : 10;
-         tiempoRestante = tiempoPartida;
-         listaLetrasSelec = []; //Lista de las letras que se seleccionaron
-         puntos = 0;
-         document.querySelector(".tablero-info__pts").innerHTML = puntos;
-         aciertos = 0;
-         setPalabras();
-      });
-      
-      //Al hacer click en la X
-      document.querySelector('.config__btn-cerrar').addEventListener('click', function () {
-        document.querySelector('.config').style.display = 'none';
-        document.querySelector("#body").className = '';
-        document.querySelector(':root').style.setProperty('--color-efectopantalla', 'transparent');
-        pausaTimer = false;
-        configAbierto = false;
-      });
+      mostrarEfectoPantallaColor("negro");
    }
    function AccionEspecial({ name }) {
       let objetosDisponsibles = Number(localStorage.getItem(`${name}LF`));
@@ -159,12 +149,12 @@ export default function Juego({ alerta }) {
       }
    }
    function ocultarEfectoPantallaColor() {
-      document.body.classList.remove("efectoPantallaColor");
+      document.querySelector(".cont-juego").classList.remove("efectoPantallaColor");
       document.querySelector(":root").style.setProperty("--color-efectopantalla", "transparent");
    }
 
    function mostrarEfectoPantallaColor(clr) {
-      document.body.classList.add("efectoPantallaColor");
+      document.querySelector(".cont-juego").classList.add("efectoPantallaColor");
       document.querySelector(":root").style.setProperty("--color-efectopantalla", `var(--efecto-pantalla-${clr})`);
    }
 
@@ -250,6 +240,8 @@ export default function Juego({ alerta }) {
    }
 
    useEffect(() => {
+      document.querySelector(".config__input--volumen").checked = JSON.parse(localStorage.getItem("sonidoLF"))
+
       setTxtPuntosAlerta("");
       const fondoReloj = document.querySelector(".fondo-reloj");
       const TableroPts = document.querySelector(".tablero-info__pts");
@@ -263,7 +255,23 @@ export default function Juego({ alerta }) {
             //Sonido se acabo el tiempo
             acaboTiempoSonido.currentTime = 0;
             acaboTiempoSonido.play();
-            acaboTiempoSonido.volume = volumenSnd;
+            acaboTiempoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
+
+            if (vidas <= 0) {
+               pausaTimer = true;
+               configAbierto = true;
+               mostrarEfectoPantallaColor("negro");
+               alerta(`Ya no tienes más vidas disponibles<br />
+                  <div className="alerta__cont-btns"><div class='alerta__btn' id="reiniciar-btn-alerta">Reiniciar</div><a href="/menu/inicio" class="alerta__btn">Inicio</a><div/>`, true)
+               document.querySelector('#reiniciar-btn-alerta').addEventListener('click', function () {
+                  document.querySelector(".alerta").style.display = "none";
+                  ocultarEfectoPantallaColor();
+                  reiniciar();
+               });
+            } else {
+               document.querySelector(".vida-" + vidas).style.color = "#a67a4f";
+               vidas--;
+            }
 
             puntos -= 400;
             TableroPts.innerHTML = puntos;
@@ -283,20 +291,20 @@ export default function Juego({ alerta }) {
          }
       }
       document.addEventListener("keydown", (ev) => {
-         const letraApretada = ev.key+"";
-         if (qwerty.includes(letraApretada)){
+         const letraApretada = ev.key + "";
+         if (qwerty.includes(letraApretada)) {
             const letraClicada = Array.from(document.querySelectorAll(".teclado__letra"))
-                     .filter(element => element.innerHTML == letraApretada);
-               listaLetrasSelec.push(letraClicada[0]);
-               verificarRespuesta(letraApretada);
+               .filter(element => element.innerHTML == letraApretada);
+            listaLetrasSelec.push(letraClicada[0]);
+            verificarRespuesta(letraApretada);
          }
-       });
+      });
    });
    function respuestaCorrecta(letra) {
       mostrarEfectoPantallaColor("verde");
       acertarEfectoSonido.currentTime = 0;
       acertarEfectoSonido.play();
-      acertarEfectoSonido.volume = volumenSnd;
+      acertarEfectoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
       aciertos++;
       recompenzaAcertar = 0.99 * (aciertos ** 2) + 27.03 * aciertos + 371.98;
       recompenzaAcertar = (recompenzaAcertar / 10).toFixed() * 10;
@@ -323,7 +331,7 @@ export default function Juego({ alerta }) {
       listaLetrasSelec[listaLetrasSelec.length - 1].style.color = "#840109";
       bopEfectoSonido.currentTime = 0;
       bopEfectoSonido.play();
-      bopEfectoSonido.volume = volumenSnd;
+      bopEfectoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
       if (aciertos - 0.5 < 0) {
          aciertos = 0;
       }
@@ -339,17 +347,18 @@ export default function Juego({ alerta }) {
          <div className='texto-puntos'></div>
          <div className="tablero-info">
             <Link to="/menu/inicio" className="tablero-info__btn-inicio" onClick={function () { clearInterval(timerJuego) }}></Link>
-            <div style={{backgroundImage: !modoJuegoEsClasico ? "" : "linear-gradient(171deg,#fff4cb 0%, #dcd4bb 20%, #635d51 80%, #635d51 100%)"}} className="tablero-info__pts-hist"><span className="fa-solid fa-crown"></span><span id="puntos-historicos">{puntosHistoricos}</span></div>
+            <div style={{ backgroundImage: !modoJuegoEsClasico ? "" : "linear-gradient(171deg,#fff4cb 0%, #dcd4bb 20%, #635d51 80%, #635d51 100%)" }} className="tablero-info__pts-hist"><span className="fa-solid fa-crown"></span><span id="puntos-historicos">{puntosHistoricos}</span></div>
             <button className="tablero-info__config" onClick={onClickBtnConfig}></button>
             <AccionEspecial name="helante" />
             <div className="tablero-info__pts">0</div>
             <AccionEspecial name="cambio" />
          </div>
-         <br />
+         <div className='corazones-vidas'><div className='vida-1'>❤</div> <div className='vida-2'>❤</div> <div className='vida-3'>❤</div></div>
          <Tabla />
          <br /><br />
          <Teclado />
          <div className="fondo-reloj"></div>
+         <Configuracion reiniciar reiniciarFunc={reiniciar} cerrarFunc={cerrarConfig} />
       </div>
    );
 }

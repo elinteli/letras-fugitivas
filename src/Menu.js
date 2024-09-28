@@ -9,11 +9,11 @@ export default function Menu({ alerta, cambiarFondo, setLocalStorage }) {
 
   function Pagina() {
     if (pagina === "diario") {
-      return <DesafioDiario alerta={alerta} />;
+      return <DesafioDiario  />;
     } else if (pagina === "tienda") {
-      return <Tienda alerta={alerta} cambiarFondo={cambiarFondo} />;
+      return <Tienda  cambiarFondo={cambiarFondo} />;
     }
-    return <Inicio alerta={alerta} setLocalStorage={setLocalStorage} />;
+    return <Inicio  setLocalStorage={setLocalStorage} />;
   }
 
   return (
