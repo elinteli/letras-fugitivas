@@ -72,7 +72,6 @@ export default function Configuracion({ reiniciar, perfil, reiniciarFunc = funct
         <div className="config__btn-cerrar" onClick={
             function () {
                 document.querySelector('.config').style.display = 'none';
-                document.querySelector("#body").className = '';
                 document.querySelector(':root').style.setProperty('--color-efectopantalla', 'transparent');
                 cerrarFunc();
             }

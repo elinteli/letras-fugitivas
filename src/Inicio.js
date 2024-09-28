@@ -14,12 +14,12 @@ export default function Inicio({ alerta, setLocalStorage }) {
     let nombreDeUsuario = setLocalStorage("nombreUsuarioLF", "Nombre de Usuario");
 
     if (fotoPerfil == "transparente") {
-      document.querySelector("#body").className = 'efectoPantallaColor';
+      document.querySelector(".cont-inicio").classList.add("efectoPantallaColor");
       document.querySelector(':root').style.setProperty('--color-efectopantalla', 'var(--efecto-pantalla-negro)');
       preguntarFotoPerfil(true);
       fotoPerfil = localStorage.getItem("ftPerfilLF");
     } else if (nombreDeUsuario == "Nombre de Usuario") {
-      document.querySelector("#body").className = 'efectoPantallaColor';
+      document.querySelector(".cont-inicio").classList.add("efectoPantallaColor");
       document.querySelector(':root').style.setProperty('--color-efectopantalla', 'var(--efecto-pantalla-negro)');
       preguntarNombrePerfil(true);
       nombreDeUsuario = localStorage.getItem("nombreUsuarioLF");
@@ -34,7 +34,7 @@ export default function Inicio({ alerta, setLocalStorage }) {
       <div className="cont-inicio__btn--conf" onClick={
         function () {
           document.querySelector('.config').style.display = 'flex';
-          document.querySelector("#body").className = 'efectoPantallaColor';
+          document.querySelector(".cont-inicio").classList.add("efectoPantallaColor");
           document.querySelector(':root').style.setProperty('--color-efectopantalla', 'var(--efecto-pantalla-negro)');
           }
       }></div>
@@ -51,7 +51,9 @@ export default function Inicio({ alerta, setLocalStorage }) {
         <Link to="/juego/clasico" className="cont-botones__btn--clasico"></Link>
         <Link to="/juego/experto" className="cont-botones__btn--experto"></Link>
       </div>
-      <Configuracion perfil />
+      <Configuracion perfil cerrarFunc={function(){
+        document.querySelector(".cont-inicio").classList.remove("efectoPantallaColor");
+        }} />
     </div>
   );
 }
