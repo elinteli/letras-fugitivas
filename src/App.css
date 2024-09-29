@@ -1321,9 +1321,10 @@ h3 {
   background-image: url("./img/corazon-rojo.png");
   background-size: 80%;
   background-repeat: no-repeat;
-  background-position: center;
-  width: 5vw;
-  height: 5vw;
+  background-position: center;    
+  width: 8vw;
+  height: 8vw;
+
 }
 .vida-usada::before {
   background-image: url("./img/corazon-negro.png");
@@ -1331,8 +1332,11 @@ h3 {
 
 @media screen and (orientation: landscape) {
   .corazones-vidas {
-    font-size: 2.3vw;
     margin: 1.3vw 0;
+  }
+  .corazones-vidas .vida-1::before,.corazones-vidas .vida-2::before,.corazones-vidas .vida-3::before {
+    width: 3vw;
+    height: 3vw;
   }
   .teclado {
     width: 100vw;
