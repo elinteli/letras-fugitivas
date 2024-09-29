@@ -34,9 +34,9 @@ export default function Juego({ alerta }) {
    let configAbierto = false;
    let vidas = 3;
    const reiniciar = function () {
-      document.querySelector(".vida-3").style.color = "#eee4c3";
-      document.querySelector(".vida-2").style.color = "#eee4c3";
-      document.querySelector(".vida-1").style.color = "#eee4c3";
+      document.querySelector(".vida-3").className = "vida-3";
+      document.querySelector(".vida-2").className = "vida-2";
+      document.querySelector(".vida-1").className = "vida-1";
       vidas = 3;
       document.querySelector('.config').style.display = 'none';
       document.querySelector("#body").className = '';
@@ -269,7 +269,7 @@ export default function Juego({ alerta }) {
                   reiniciar();
                });
             } else {
-               document.querySelector(".vida-" + vidas).style.color = "#a67a4f";
+               document.querySelector(".vida-" + vidas).classList.add("vida-usada");
                vidas--;
             }
 
@@ -353,7 +353,7 @@ export default function Juego({ alerta }) {
             <div className="tablero-info__pts">0</div>
             <AccionEspecial name="cambio" />
          </div>
-         <div className='corazones-vidas'><div className='vida-1'>❤</div> <div className='vida-2'>❤</div> <div className='vida-3'>❤</div></div>
+         <div className='corazones-vidas'><div className='vida-1'></div> <div className='vida-2'></div> <div className='vida-3'></div></div>
          <Tabla />
          <br /><br />
          <Teclado />

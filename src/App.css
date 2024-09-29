@@ -458,7 +458,9 @@ h1 {
   display: none;
   z-index: 30000;
 }
-
+.config {
+  z-index: 60000;
+}
 .config__btn-cerrar::before {
   font-family: 'fa-solid';
   content: "\f057"
@@ -552,7 +554,7 @@ h1 {
   width: 100vw;
   height: 100vh;
   opacity: .5;
-  z-index: 20000;
+  z-index: 55000;
   background-color: var(--color-efectopantalla);
 }
 
@@ -1312,6 +1314,21 @@ h3 {
   color: #eee4c3;
 }
 
+.vida-1::before, .vida-2::before, .vida-3::before {
+  content: "";
+  display: flex;
+  align-items: center;
+  background-image: url("./img/corazon-rojo.png");
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 5vw;
+  height: 5vw;
+}
+.vida-usada::before {
+  background-image: url("./img/corazon-negro.png");
+}
+
 @media screen and (orientation: landscape) {
   .corazones-vidas {
     font-size: 2.3vw;
@@ -1505,6 +1522,7 @@ height: 10vh;
   height: 11vh;
   width: 100vw;
   overflow: hidden;
+  z-index: 2000;
 }
 .cont-botones__btn--clasico {
   margin-top: 0;
