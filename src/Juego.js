@@ -257,7 +257,7 @@ export default function Juego({ alerta }) {
             acaboTiempoSonido.play();
             acaboTiempoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
 
-            if (vidas <= 0) {
+            if (vidas <= 1) {
                pausaTimer = true;
                configAbierto = true;
                mostrarEfectoPantallaColor("negro");
