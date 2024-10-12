@@ -34,13 +34,17 @@ export default function Juego({ alerta }) {
    let configAbierto = false;
    let vidas = 3;
    const reiniciar = function () {
+      if (!configAbierto) {
+         timerJuego = setInterval(updateTime, 100);
+      }
       document.querySelector(".vida-3").className = "vida-3";
       document.querySelector(".vida-2").className = "vida-2";
       document.querySelector(".vida-1").className = "vida-1";
       vidas = 3;
       document.querySelector('.config').style.display = 'none';
-      document.querySelector("#body").className = '';
       document.querySelector(':root').style.setProperty('--color-efectopantalla', 'transparent');
+      ocultarEfectoPantallaColor();
+      document.querySelector("#body").className = '';
       pausaTimer = false;
       configAbierto = false;
 
@@ -51,6 +55,53 @@ export default function Juego({ alerta }) {
       document.querySelector(".tablero-info__pts").innerHTML = puntos;
       aciertos = 0;
       setPalabras();
+   }
+   const updateTime = () => {
+      const fondoReloj = document.querySelector(".fondo-reloj");
+      const TableroPts = document.querySelector(".tablero-info__pts");
+      if (!pausaTimer && !configAbierto) {
+         tiempoRestante -= 0.1;
+      }
+      fondoReloj.style.height = tiempoRestante / tiempoPartida * 100 + "%";
+      if (tiempoRestante <= 0 && !pausaTimer) {
+         //Sonido se acabo el tiempo
+         acaboTiempoSonido.currentTime = 0;
+         acaboTiempoSonido.play();
+         acaboTiempoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
+
+         if (vidas <= 1) {
+            pausaTimer = true;
+            mostrarEfectoPantallaColor("negro");
+            alerta(`Ya no tienes más vidas disponibles<br />
+               <div className="alerta__cont-btns"><div class='alerta__btn' id="reiniciar-btn-alerta">Reiniciar</div><a href="/menu/inicio" class="alerta__btn">Inicio</a><div/>`, true)
+            document.querySelector('#reiniciar-btn-alerta').addEventListener('click', function () {
+               document.querySelector(".alerta").style.display = "none";
+               ocultarEfectoPantallaColor();
+               reiniciar();
+            });
+            clearInterval(timerJuego);
+            return;
+         } else {
+            document.querySelector(".vida-" + vidas).classList.add("vida-usada");
+            vidas--;
+         }
+
+         puntos -= 400;
+         TableroPts.innerHTML = puntos;
+         setTxtPuntosAlerta("-400");
+
+         if (aciertos - 1 < 0) {
+            aciertos = 0;
+         } else {
+            aciertos--;
+         }
+
+         mostrarSolucion(letraSolucion);
+         pausaTimer = true;
+         mostrarEfectoPantallaColor("rojo");
+         setTimeout(setPalabras, 2000);
+         setTimeout(ocultarEfectoPantallaColor, 300);
+      }
    }
    const cerrarConfig = function () {
       ocultarEfectoPantallaColor();
@@ -243,53 +294,7 @@ export default function Juego({ alerta }) {
       document.querySelector(".config__input--volumen").checked = JSON.parse(localStorage.getItem("sonidoLF"))
 
       setTxtPuntosAlerta("");
-      const fondoReloj = document.querySelector(".fondo-reloj");
-      const TableroPts = document.querySelector(".tablero-info__pts");
       timerJuego = setInterval(updateTime, 100);
-      function updateTime() {
-         if (!pausaTimer && !configAbierto) {
-            tiempoRestante -= 0.1;
-         }
-         fondoReloj.style.height = tiempoRestante / tiempoPartida * 100 + "%";
-         if (tiempoRestante <= 0 && !pausaTimer) {
-            //Sonido se acabo el tiempo
-            acaboTiempoSonido.currentTime = 0;
-            acaboTiempoSonido.play();
-            acaboTiempoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
-
-            if (vidas <= 1) {
-               pausaTimer = true;
-               configAbierto = true;
-               mostrarEfectoPantallaColor("negro");
-               alerta(`Ya no tienes más vidas disponibles<br />
-                  <div className="alerta__cont-btns"><div class='alerta__btn' id="reiniciar-btn-alerta">Reiniciar</div><a href="/menu/inicio" class="alerta__btn">Inicio</a><div/>`, true)
-               document.querySelector('#reiniciar-btn-alerta').addEventListener('click', function () {
-                  document.querySelector(".alerta").style.display = "none";
-                  ocultarEfectoPantallaColor();
-                  reiniciar();
-               });
-            } else {
-               document.querySelector(".vida-" + vidas).classList.add("vida-usada");
-               vidas--;
-            }
-
-            puntos -= 400;
-            TableroPts.innerHTML = puntos;
-            setTxtPuntosAlerta("-400");
-
-            if (aciertos - 1 < 0) {
-               aciertos = 0;
-            } else {
-               aciertos--;
-            }
-
-            mostrarSolucion(letraSolucion);
-            pausaTimer = true;
-            mostrarEfectoPantallaColor("rojo");
-            setTimeout(setPalabras, 2000);
-            setTimeout(ocultarEfectoPantallaColor, 300);
-         }
-      }
       document.addEventListener("keydown", (ev) => {
          const letraApretada = ev.key + "";
          if (qwerty.includes(letraApretada)) {
@@ -300,6 +305,7 @@ export default function Juego({ alerta }) {
          }
       });
    });
+
    function respuestaCorrecta(letra) {
       mostrarEfectoPantallaColor("verde");
       acertarEfectoSonido.currentTime = 0;

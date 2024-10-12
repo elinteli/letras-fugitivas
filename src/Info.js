@@ -9,7 +9,6 @@ export default function Info({ alerta }) {
                 let fuente = source;
                 let parametros = [nombre, autor, licencia, fuente];
                 for (let i = 0; i < 4; i++) {
-                        console.log(parametros[i], typeof parametros[i]);
                         if (typeof parametros[i] == "object") {
                                 parametros[i] = <a className="cont-cred__enlace"
                                         href={parametros[i][1]} target="_blank"
