@@ -10,13 +10,16 @@ import errorAudio from './sounds/notification-sound-error-sound-effect-203788.mp
 import Configuracion from './config';
 
 export default function Juego({ alerta }) {
-   const { modoJuego } = useParams();
+   const { modoJuego } = useParams();   
+   const modoJuegoEsClasico = modoJuego == "clasico";
+   const seed = Number(modoJuegoEsClasico) + new Date().getTime().toString() + Math.random().toString();
+   console.log(seed);
    let seedrandom = require('seedrandom');
-   const generadorNumAleat = seedrandom();
+   let numRonda = 0;
+   let generadorNumAleat = seedrandom(seed+""+numRonda);
 
    const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "br", "a", "s", "d", "f", "g", "h", "j", "k", "l", "br", "z", "x", "c", "v", "b", "n", "m"];
    const letras = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"];
-   const modoJuegoEsClasico = modoJuego == "clasico";
    let tiempoPartida = modoJuegoEsClasico ? 7 : 10;
    let tiempoRestante = tiempoPartida;
    const bopEfectoSonido = new Audio(bopAudio);
@@ -73,7 +76,7 @@ export default function Juego({ alerta }) {
             pausaTimer = true;
             mostrarEfectoPantallaColor("negro");
             alerta(`Ya no tienes más vidas disponibles<br />
-               <div className="alerta__cont-btns"><div class='alerta__btn' id="reiniciar-btn-alerta">Reiniciar</div><a href="/menu/inicio" class="alerta__btn">Inicio</a><div/>`, true)
+               <div className="alerta__cont-btns"><div class='alerta__btn' id="reiniciar-btn-alerta">Reiniciar</div><a href="/menu/inicio" class="alerta__btn">Inicio</a><a href="/revisar-juego/${seed+"&"+numRonda}" class="alerta__btn">Revisar Juego</a><div/>`, true)
             document.querySelector('#reiniciar-btn-alerta').addEventListener('click', function () {
                document.querySelector(".alerta").style.display = "none";
                ocultarEfectoPantallaColor();
@@ -170,6 +173,8 @@ export default function Juego({ alerta }) {
       }
    }
    function getPalabras() {
+      numRonda++;
+      generadorNumAleat = seedrandom(seed+""+numRonda);
       if (tiempoPartida > 2) {
          tiempoPartida -= 0.01; //Aumentar la velocidad del tiempo para encontrar la letra
       }

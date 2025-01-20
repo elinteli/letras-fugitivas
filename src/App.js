@@ -4,6 +4,7 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import './App.css';
 import Menu from './Menu';
 import Juego from './Juego';
+import RevisarJuego from './RevisarJuego';
 import Info from './Info';
 import images from './utils/importImages';
 import alerta from './alerta';
@@ -58,6 +59,7 @@ export default function App() {
         <Routes>
           <Route path="/menu/:pagina" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} setLocalStorage={setLocalStorage}/>} />
           <Route path="/juego/:modoJuego" element={<Juego alerta={alerta} />} />
+          <Route path="/revisar-juego/:info" element={<RevisarJuego alerta={alerta} />} />
           <Route path="/info" element={<Info alerta={alerta} />} />
           <Route path="*" element={<Menu alerta={alerta} cambiarFondo={cambiarFondo} setLocalStorage={setLocalStorage}/>} />
         </Routes>

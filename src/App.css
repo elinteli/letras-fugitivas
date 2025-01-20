@@ -297,7 +297,10 @@ h1 {
 .tablero-info__cambio,
 .tablero-info__pts-hist,
 .cont-botones__btn--clasico,
-.cont-botones__btn--experto {
+.cont-botones__btn--experto,
+.tabla__btn-info,
+.controles__before,
+.controles__next {
   background: url("./img/boton.png");
   background-repeat: repeat;
   background-size: 200px;
@@ -326,7 +329,10 @@ h1 {
 .cont-info__btn:active:enabled,
 .cont-inicio__btn--info:active,
 .cont-inicio__btn--conf:active,
-.cont-fondos__fondo:active {
+.cont-fondos__fondo:active,
+.tabla__btn-info:active,
+.controles__before:active,
+.controles__next:active {
   transform: translateY(4px);
   box-shadow: none;
 }
@@ -346,7 +352,9 @@ h1 {
 .cont-fondos__fondo--blkdo,
 .cont-juego__fecha,
 .tablero-info__helante:disabled,
-.tablero-info__cambio:disabled {
+.tablero-info__cambio:disabled,
+.controles__before:disabled,
+.controles__next:disabled {
   background: url("./img/boton-apagado.png");
   color: #45200e;
 }
@@ -1051,7 +1059,22 @@ h3 {
   border-bottom: 0.4vw solid var(--color-tablero);
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
+  height: 100%;
+}
+
+.tabla__btn-info::before {
+  font-family: 'fa-solid';
+  content: "\3f";
+}
+.tabla__btn-info {
+  position: absolute;
+  font-size: 6vw;
+  width: 10vw;
+  height: 10vw;
+  left: 65vw;
+  margin-right: 15px;
+  align-items: middle;
 }
 
 .tabla__palabra b {
@@ -1168,7 +1191,8 @@ h3 {
 }
 
 .teclado,
-.teclado--diario {
+.teclado--diario,
+.controles {
   display: inline-block;
   width: 100%;
   background-color: #b0afaf88;
@@ -1328,6 +1352,34 @@ h3 {
 }
 .vida-usada::before {
   background-image: url("./img/corazon-negro.png");
+}
+
+.controles {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  font-size: 8vw;
+  padding: 7vh 0;
+  padding-bottom: 8vh;
+}
+.controles__before, .controles__next, .controles__num {
+  display: flex;
+}
+.controles__before, .controles__next {
+  width: 12vw;
+  height: 12vw;
+  border-radius: 100%;
+}
+.controles__before:before {
+  font-family: 'fa-solid';
+  content: "\f104";
+}
+
+.controles__next:before {
+  font-family: 'fa-solid';
+  content: "\f105";
 }
 
 @media screen and (orientation: landscape) {
