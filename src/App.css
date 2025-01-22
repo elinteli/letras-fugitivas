@@ -1382,7 +1382,31 @@ h3 {
   content: "\f105";
 }
 
+.alerta ul li {
+  list-style: none;
+}
+.alerta ol {
+  text-align: left;
+}
+.alerta dt {
+  display: none;
+}
+
 @media screen and (orientation: landscape) {
+  .tabla__btn-info {
+    border-radius: 10px;
+    width: 7vh;
+    height: 7vh;
+    font-size: 2.5vw;
+  }
+  .controles__next, .controles__before {
+    width: 5vw;
+    height: 5vw;
+    font-size: 2.5vw;
+  }
+  .controles__num {
+    font-size: min(7.5vh, 10.5vw);
+  }
   .corazones-vidas {
     margin: 1.3vw 0;
   }
@@ -1694,6 +1718,7 @@ height: 10vh;
   width: 12vw;
   height: 12vw;
 }
+
 }
 
 .inline-block{

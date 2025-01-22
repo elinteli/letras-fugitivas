@@ -219,30 +219,6 @@ export default function RevisarJuego({ alerta }) {
       </ul>);
    }
 
-   function verificarRespuesta(letra) {
-      //Si no está pausado
-      if (!pausaTimer) {
-
-         // RESPUESTA CORRECTA
-         if (letra === letraSolucion) {
-            respuestaCorrecta(letra);
-         }
-         // RESPUESTA INCORRECTA
-         else {
-            respuestaIncorrecta(letra);
-         }
-
-         //Actualizar historico si hay un nuevo record
-         if (puntosHistoricos < puntos) {
-            puntosHistoricos = puntos;
-            localStorage.setItem(modoJuego + "LF", puntos);
-            document.querySelector("#puntos-historicos").innerHTML = puntosHistoricos;
-         }
-
-         setTimeout(ocultarEfectoPantallaColor, 300);
-         document.querySelector(".tablero-info__pts").innerHTML = puntos;
-      }
-   }
    function elegirNumeroAleatorio(numeroMaximo) {
       return Math.floor(generadorNumAleat() * numeroMaximo);
    }
@@ -267,21 +243,6 @@ export default function RevisarJuego({ alerta }) {
       };
    }
 
-   function setTxtPuntosAlerta(texto) {
-      const textoPuntosDiv = document.querySelector(".texto-puntos");
-      const ocultarTextoPuntos = setTimeout(() => {
-         textoPuntosDiv.innerHTML = ""; // Limpiar contenido
-      }, 5000);
-      clearTimeout(ocultarTextoPuntos);
-      textoPuntosDiv.innerHTML = texto;
-      textoPuntosDiv.classList.remove("animacion-aparecerElementoAgrandar");
-      void textoPuntosDiv.offsetWidth; // Trigger reflow
-      textoPuntosDiv.classList.add("animacion-aparecerElementoAgrandar");
-      const posY = elegirNumeroAleatorio(45) + 10;
-      const posX = elegirNumeroAleatorio(50) + 15;
-      document.querySelector(":root").style.setProperty("--posicion-texto-puntos-y", `${posY}vh`);
-      document.querySelector(":root").style.setProperty("--posicion-texto-puntos-x", `${posX}vw`);
-   }
    function restablecerColoresLetras() {
       for (let i = 0; i < listaLetrasSelec.length; i++) {
          listaLetrasSelec[i].style.color = "#45200e";
@@ -340,6 +301,9 @@ export default function RevisarJuego({ alerta }) {
                   );
                   return palabraEncontrada ? palabraEncontrada : palabras[0];
                }
+               else {
+                  return word;
+               }
             }
          } catch {
             console.error("Error al procesar la solicitud");
@@ -347,25 +311,36 @@ export default function RevisarJuego({ alerta }) {
          }
       };
 
-      function getDefinition(word) {
-         // Busca el objeto cuyo "lemma" coincida con la palabra proporcionada
-         const result = dicAi.find(item => item.lemma === word);
-         // Si se encuentra, devuelve la definición; si no, un mensaje de error
-         return result ? result.definition : "no se encontró una definición.";
+      async function getDefinition(word) {
+         const palabraNormalizada = await getBaseForm(word);
+         try {
+            const response = await fetch(
+               `https://es.wiktionary.org/w/api.php?action=query&titles=${palabraNormalizada}&prop=extracts&format=json&origin=*`
+            );
+            const data = await response.json();
+            const page = Object.values(data.query.pages)[0];
+
+            if (page?.extract) {
+               const parser = new DOMParser();
+               const htmlDoc = parser.parseFromString(page.extract, "text/html");
+               const definition = htmlDoc.querySelector("dl").cloneNode(true).outerHTML.toString();
+               const modDef = definition.replace(/<dl>/g,"<ol>").replace(/<\/dl>/g,"</ol>").replace(/<dd>/g,"<li>").replace(/<\/dd>/g,"</li>");
+               const texto = normalizeSpaces(decodeHtmlEntities(modDef));
+               return texto ? [palabraNormalizada,texto] : [word,"no se encontró una definición."];
+            }
+         } catch {
+            console.error("Error al procesar la solicitud");
+            return word;
+         }
       }
 
       for (let i = 0; i < 5; i++) {
          document.querySelectorAll(".tabla__btn-info")[i].addEventListener("click", async function () {
             const palabra = palabras[i].replace(/_/g, letraSolucion);
-            let definicion = getDefinition(palabra);
-            if (definicion == "no se encontró una definición.") {
-               const palabraSinConjugar = await getBaseForm(palabra);
-               definicion = getDefinition(palabraSinConjugar);
-               if (definicion != "no se encontró una definición.") {
-                  definicion = " (" + palabraSinConjugar + ") " + definicion;
-               }
-            }
-            alerta(`${palabra.toUpperCase()}\n ${definicion}`);
+            const texto = await getDefinition(palabra);
+            const palabraNormalizada = texto[0];
+            const definicion = texto[1];
+            alerta(`${palabra.toUpperCase()} ${palabra != palabraNormalizada ? `(${palabraNormalizada})`:""}\n ${definicion}`);
          });
       }
 
@@ -375,63 +350,10 @@ export default function RevisarJuego({ alerta }) {
 
       document.querySelector(".config__input--volumen").checked = JSON.parse(localStorage.getItem("sonidoLF"))
 
-      setTxtPuntosAlerta("");
-      document.addEventListener("keydown", (ev) => {
-         const letraApretada = ev.key + "";
-         if (qwerty.includes(letraApretada)) {
-            const letraClicada = Array.from(document.querySelectorAll(".teclado__letra"))
-               .filter(element => element.innerHTML == letraApretada);
-            listaLetrasSelec.push(letraClicada[0]);
-            verificarRespuesta(letraApretada);
-         }
-      });
    });
 
-   function respuestaCorrecta(letra) {
-      mostrarEfectoPantallaColor("verde");
-      acertarEfectoSonido.currentTime = 0;
-      acertarEfectoSonido.play();
-      acertarEfectoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
-      aciertos++;
-      recompenzaAcertar = 0.99 * (aciertos ** 2) + 27.03 * aciertos + 371.98;
-      recompenzaAcertar = (recompenzaAcertar / 10).toFixed() * 10;
-      puntos += recompenzaAcertar;
-      if (tiempoRestante < (tiempoPartida * 0.5)) { // Si ya paso mas de la mitad del tiempo
-         setTxtPuntosAlerta(`¡Correcto!\n+${recompenzaAcertar}`);
-      } else {
-         setTxtPuntosAlerta(`¡Veloz!\n+${recompenzaAcertar}`);
-      }
-      setTimeout(setPalabras, 2000);
-      mostrarSolucion(letra);
-      pausaTimer = true;
-   }
-
-   function respuestaIncorrecta(letra) {
-      const esSolucionAlternativa = palabras.every(palabra =>
-         dicJsonRae.includes(palabra.replace(/_/g, letra))
-      );
-      if (esSolucionAlternativa) {
-         respuestaCorrecta(letra);
-         return;
-      }
-      mostrarEfectoPantallaColor("rojo");
-      listaLetrasSelec[listaLetrasSelec.length - 1].style.color = "#840109";
-      bopEfectoSonido.currentTime = 0;
-      bopEfectoSonido.play();
-      bopEfectoSonido.volume = JSON.parse(localStorage.getItem("sonidoLF"));
-      if (aciertos - 0.5 < 0) {
-         aciertos = 0;
-      }
-      else {
-         aciertos -= 0.5;
-      }
-      const cantidadPuntosRestar = modoJuegoEsClasico ? 110 : 80;
-      puntos -= cantidadPuntosRestar;
-      setTxtPuntosAlerta(`-${cantidadPuntosRestar}`);
-   }
    return (
       <div className={`cont-juego modo${modoJuego}`}>
-         <div className='texto-puntos'></div>
          <div className="tablero-info">
             <Link to="/menu/inicio" className="tablero-info__btn-inicio" onClick={function () { clearInterval(timerJuego) }}></Link>
             <div style={{ backgroundImage: !modoJuegoEsClasico ? "" : "linear-gradient(171deg,#fff4cb 0%, #dcd4bb 20%, #635d51 80%, #635d51 100%)" }} className="tablero-info__pts-hist"><span className="fa-solid fa-crown"></span><span id="puntos-historicos">{puntosHistoricos}</span></div>
