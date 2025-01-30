@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import dicJsonClasico from './resources/dicClasico.json';
 import dicJsonExperto from './resources/dicExperto.json';
-import dicJsonRae from './resources/dicRAE.json';
-import dicAi from './resources/SpanishBFF_0_2.json';
+import ciudades from './resources/ciudades.json';
 import bopAudio from './sounds/bop.wav';
 import gameBonusAudio from './sounds/game-bonus-144751.mp3';
 import errorAudio from './sounds/notification-sound-error-sound-effect-203788.mp3';
@@ -15,13 +14,15 @@ export default function RevisarJuego({ alerta }) {
    const seed = info.split("&")[0];
    const rondaMax = info.split("&")[1];
 
-   const [isBeforeDisabled, setIsBeforeDisabled] = useState(false);
-   const [isNextDisabled, setIsNextDisabled] = useState(true);
-   const [numRonda, setNumRonda] = useState(rondaMax);
+   // const [isBeforeDisabled, setIsBeforeDisabled] = useState(false);
+   // const [isNextDisabled, setIsNextDisabled] = useState(true);
+   // const [numRonda, setNumRonda] = useState(rondaMax);
+   let numRonda = rondaMax;
 
    let seedrandom = require('seedrandom');
-   let generadorNumAleat = seedrandom(seed+""+numRonda);
+   let generadorNumAleat = seedrandom(seed + "" + numRonda);
 
+   let esRondaEspecial = false;
    let rondas = [];
    const modoJuego = Number(seed[0]) ? "clasico" : "experto";
    const qwerty = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "br", "a", "s", "d", "f", "g", "h", "j", "k", "l", "br", "z", "x", "c", "v", "b", "n", "m"];
@@ -43,6 +44,20 @@ export default function RevisarJuego({ alerta }) {
    let timerJuego;
    let configAbierto = false;
    let vidas = 3;
+
+   const ciudadToRegion = new Map();
+
+   ciudades.forEach(entry => {
+      const [ciudad, pais, , estado] = entry;
+      ciudadToRegion.set(ciudad, estado || pais); // Si hay estado, lo usa; si no, usa el país
+    });
+
+   const ciudadToState = new Map();
+
+   ciudades.forEach(([ciudad, pais]) => {
+      ciudadToState.set(ciudad, pais);
+   });
+
    const reiniciar = function () {
       document.querySelector(".vida-3").className = "vida-3";
       document.querySelector(".vida-2").className = "vida-2";
@@ -107,93 +122,147 @@ export default function RevisarJuego({ alerta }) {
    }
    function Controles() {
       return (
-      <div className="controles">
-         <button class="controles__before" onClick={function () {
-            generadorNumAleat = seedrandom(seed+""+numRonda)
-            document.querySelector(".controles__num").innerHTML = numRonda;
-            setPalabras();
-            if (numRonda-1 <= 1) {
-               console.log("minimo");
-               setIsBeforeDisabled(true);
-               setIsNextDisabled(false);
+         <div className="controles">
+            <button class="controles__before" onClick={function () {
+               // if (numRonda > 1) {
+                  // if (numRonda-1 <= 1) {
+                  //    console.log("minimo");
+                  //    // setIsBeforeDisabled(true);
+                  //    // setIsNextDisabled(false);
+                  // }
+                  // if (numRonda-1 < rondaMax) {
+                  //    // setIsNextDisabled(false);
+                  // }
+
+                  console.log("------------------------------");
+                  console.log("Antes", numRonda);
+                  numRonda--;
+                  console.log("Después (-)", numRonda);
+                  document.querySelector(".controles__num").innerHTML = numRonda;
+                  generadorNumAleat = seedrandom(seed + "" + numRonda);
+                  if (numRonda < rondaMax) { 
+                     document.querySelector(".controles__next").disabled = false;
+                  }
+                  if (numRonda <= 1) { 
+                     document.querySelector(".controles__before").disabled = true;
+                  }
+                  setPalabras();
+               // }
             }
-            if (numRonda-1 < rondaMax) {
-               setIsNextDisabled(false);
+            }></button>
+            <div class="controles__num">{numRonda}</div>
+            <button class="controles__next" onClick={function () {
+               // if (numRonda < rondaMax) {
+                  // if (numRonda+1 > 1) {
+                  //    // setIsBeforeDisabled(false);
+                  // }
+                  // if (numRonda+1 >= rondaMax) {
+                  //    console.log("maximo");
+                  //    // setIsNextDisabled(true);
+                  // }
+                  console.log("------------------------------");
+                  console.log("Antes", numRonda);
+                  numRonda++;
+                  console.log("Después (+)", numRonda);
+                  document.querySelector(".controles__num").innerHTML = numRonda;
+                  generadorNumAleat = seedrandom(seed + "" + numRonda);
+                  if (numRonda > 1) { 
+                     document.querySelector(".controles__before").disabled = false;
+                  }
+                  if (numRonda >= rondaMax) { 
+                     document.querySelector(".controles__next").disabled = true;
+                  }
+                  setPalabras();
+               // }
             }
-            
-            console.log("ronda: ",numRonda-1);
-            setNumRonda(numRonda - 1);
-            }
-            } disabled={isBeforeDisabled}></button>
-         <div class="controles__num">{numRonda}</div>
-         <button class="controles__next" onClick={function () {
-            generadorNumAleat = seedrandom(seed+""+numRonda)
-            document.querySelector(".controles__num").innerHTML = numRonda;
-            setPalabras();            
-            
-            console.log("ronda: ",numRonda+1);
-            if (numRonda+1 > 1) {
-               setIsBeforeDisabled(false);
-            }
-            if (numRonda+1 >= rondaMax) {
-               console.log("maximo");
-               setIsNextDisabled(true);
-            }
-            
-            setNumRonda(numRonda + 1);
-            }
-            } disabled={isNextDisabled}></button>
-      </div>
+            }></button>
+         </div>
       );
    }
    function setPalabras() {
       if (!rondas[numRonda]) {
+         rondas[numRonda] = true;
          palabras = getPalabras();
-         rondas[numRonda] = {
+         localStorage.setItem("ronda-" + numRonda, JSON.stringify({
             palabras: palabras,
-            letraSolucion:letraSolucion
-         };
+            letraSolucion: letraSolucion
+         }))
       }
       else {
-         palabras = rondas[numRonda].palabras;
-         letraSolucion = rondas[numRonda].letraSolucion;
+         const infoRonda = JSON.parse(localStorage.getItem("ronda-" + numRonda));
+         palabras = infoRonda.palabras;
+         esRondaEspecial = palabras[0].includes("~");
+         letraSolucion = infoRonda.letraSolucion;
       }
+      document.querySelector(".tabla").className = `tabla ${esRondaEspecial ? "tabla__especial" : ""}`;
       for (let i = 0; i < 5; i++) {
          document.querySelectorAll(".tabla__palabra-div")[i].innerHTML = palabras[i].replace(/_/g, `<b>${letraSolucion}</b>`);
       }
-      console.log(rondas)
    }
+
    function getPalabras() {
-      generadorNumAleat = seedrandom(seed+""+numRonda)
+      generadorNumAleat = seedrandom(seed + "" + numRonda);
       if (tiempoPartida > 2) {
          tiempoPartida -= 0.01; //Aumentar la velocidad del tiempo para encontrar la letra
       }
       tiempoRestante = tiempoPartida;
-      pausaTimer = true; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
-      restablecerColoresLetras();
+      pausaTimer = false; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
-      let palabrasNvlActual = [];
-      for (let i = 0; i < 5; i++) {
-         let solucionRenglonActual = "";
-         let palabraRenglonActual;
-         let diccionario = modoJuegoEsClasico
-            ? dicJsonClasico /*Si es clasico: palabra facil*/
-            : ((elegirNumeroAleatorio(2)) ? dicJsonClasico : dicJsonExperto); //Si es experto: 50% probabilidad de palabra dificil, 50% probabilidad palabra facil
-         while (letraSolucion !== solucionRenglonActual || palabrasNvlActual.includes(palabraRenglonActual)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
-            let parMinimoElegido = diccionario[elegirNumeroAleatorio(diccionario.length)];
-            let info = unirPalabras(parMinimoElegido[0], parMinimoElegido[1]);
-            palabraRenglonActual = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
-            solucionRenglonActual = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
+
+      esRondaEspecial = (elegirNumeroAleatorio(10) == 0);
+      if (esRondaEspecial) { // 1/10 de probabilidad
+         return getPalabrasEspeciales(numRonda);
+      }
+
+      let cincoPalabras = []; //Array con las palabras que se van a mostrar
+      for (let i = 0; i < 5; i++) { //Encuentra cinco palabras
+         let solucionPalabra = "";
+         let palabraIncompleta;
+         let diccionario = modoJuegoEsClasico ? dicJsonClasico : ((elegirNumeroAleatorio(2)) ? dicJsonClasico : dicJsonExperto);
+         //Diccionario en clasico es facil y en experto hay 50/50 de que sea facil/dificil
+         while ((letraSolucion !== solucionPalabra[0] && letraSolucion !== solucionPalabra[1]) || cincoPalabras.includes(palabraIncompleta)) { //Busca una palabra hasta que encuentre una que se pueda resolver con la letra solucion elegida y no sea repetida
+            let conjuntoElegido = diccionario[elegirNumeroAleatorio(diccionario.length)];
+            let info = quitarLetra(conjuntoElegido);
+            palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
+            solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
          }
-         palabrasNvlActual.push(palabraRenglonActual);
+         cincoPalabras.push(palabraIncompleta);
       }
-      return (palabrasNvlActual);
+      localStorage.setItem("ronda-" + numRonda, JSON.stringify({
+         palabras: cincoPalabras,
+         letraSolucion: letraSolucion
+      }))
+      return (cincoPalabras);
    }
-   function mostrarSolucion(letraCorrecta) {
-      for (let i = 0; i < 5; i++) {
-         document.querySelectorAll(".tabla__palabra-div")[i].innerHTML = palabras[i].replace(/_/g, `<b>${letraCorrecta}</b>`);
+
+   function getPalabrasEspeciales() {
+      const categoriaEspecial = "ciudades";
+      let cincoPalabras = [`~ ${categoriaEspecial} ~`]; // primera y ultima palabra es la categoria
+      let palabrasElegidas = []; //palabras pero completas, sin letras quitadas
+      for (let i = 0; i < 3; i++) { // Encontrar tres palabras
+         let solucionPalabra = "";
+         let dificultadRenglonActual = "";
+         let palabraIncompleta;
+         let palabraElegida;
+         const diccionario = ciudades;
+         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
+            palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
+            let info = quitarLetra(palabraElegida[0]);
+            dificultadRenglonActual = palabraElegida[2];
+            palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
+            solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
+         }
+         cincoPalabras.push(palabraIncompleta);
+         palabrasElegidas.push(palabraElegida[0]);
       }
+      cincoPalabras.push(`~ ${categoriaEspecial} ~`); // primera y ultima palabra es la categoria
+      localStorage.setItem("ronda-" + numRonda, JSON.stringify({
+         palabras: cincoPalabras,
+         letraSolucion: letraSolucion
+      }))
+      return (cincoPalabras);
    }
+
    function ocultarEfectoPantallaColor() {
       document.querySelector(".cont-juego").classList.remove("efectoPantallaColor");
       document.querySelector(":root").style.setProperty("--color-efectopantalla", "transparent");
@@ -205,52 +274,70 @@ export default function RevisarJuego({ alerta }) {
    }
 
    function Tabla() {
-      palabras = getPalabras();
-      rondas[numRonda] = {
+      palabras = getPalabras(numRonda);
+      rondas[numRonda] = true;
+      localStorage.setItem("ronda-" + numRonda, JSON.stringify({
          palabras: palabras,
-         letraSolucion:letraSolucion
-      };
-      return (<ul className="tabla">
-         <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[0].split("_")[0]}<b>{letraSolucion}</b>{palabras[0].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
+         letraSolucion: letraSolucion
+      }))
+      return (<ul className={`tabla ${esRondaEspecial ? "tabla__especial" : ""}`}>
+         <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[0].split("_")[0]}{palabras[0].includes("_") ? <b>{letraSolucion}</b> : ""}{palabras[0].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
          <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[1].split("_")[0]}<b>{letraSolucion}</b>{palabras[1].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
          <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[2].split("_")[0]}<b>{letraSolucion}</b>{palabras[2].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
          <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[3].split("_")[0]}<b>{letraSolucion}</b>{palabras[3].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
-         <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[4].split("_")[0]}<b>{letraSolucion}</b>{palabras[4].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
+         <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[4].split("_")[0]}{palabras[4].includes("_") ? <b>{letraSolucion}</b>:""}{palabras[4].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
       </ul>);
    }
 
    function elegirNumeroAleatorio(numeroMaximo) {
       return Math.floor(generadorNumAleat() * numeroMaximo);
    }
-   function unirPalabras(palabra1, palabra2) {
-      let resultado = palabra1.split("");
-      let letraQuitada;
-      for (let i = 0; i < palabra1.length; i++) { //Recorrer cada letra de las palabras
-         if (palabra1[i] === palabra2[i]) { //Si tienen la misma letra
-            continue;
-         } else { //Si esa letra es diferente
-            resultado[i] = "_"; //Agregar un guion en vez de la letra al resultado
-            resultado = resultado.join("");
-            //50% solucion es letra 1, 50% solucion es letra 2
-            letraQuitada = (elegirNumeroAleatorio(2)) ? palabra1[i] : palabra2[i];
-            break;
+
+   function quitarLetra(conjunto) {
+      //CASO A: DOS PALABRAS
+      if (Array.isArray(conjunto)) {
+         const [primeraPalabra, segundaPalabra] = conjunto;
+         for (let i = 0; i < primeraPalabra.length; i++) { //Recorrer cada letra de las palabras
+
+            if (primeraPalabra[i] !== segundaPalabra[i]) { //Si no coinciden las letras
+               const palabraIncompleta = primeraPalabra.slice(0, i) + "_" + primeraPalabra.slice(i + 1);
+               const solucion = [primeraPalabra[i], segundaPalabra[i]];
+
+               return {
+                  palabraIncompleta: palabraIncompleta,
+                  solucion: solucion
+               };
+            }
+
          }
       }
+      //CASO B: UNA PALABRA
+      else {
+         const letrasPermitidas = new Set(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"]);
+         const letras = conjunto.split('');
+         const indicesPermitidos = letras
+            .map((letra, i) => letrasPermitidas.has(letra.toLowerCase()) ? i : -1)
+            .filter(i => i !== -1); //Indices en la palabra donde estan las letras permitidas
 
-      return {
-         palabraIncompleta: resultado,
-         solucion: letraQuitada
-      };
-   }
+         if (indicesPermitidos.length === 0) {
+            return { palabraIncompleta: conjunto, solucion: null };
+         }
 
-   function restablecerColoresLetras() {
-      for (let i = 0; i < listaLetrasSelec.length; i++) {
-         listaLetrasSelec[i].style.color = "#45200e";
+         const indiceAleatorio = indicesPermitidos[elegirNumeroAleatorio(indicesPermitidos.length)];
+         const letraQuitada = letras[indiceAleatorio];
+         letras[indiceAleatorio] = '_';
+
+         return {
+            palabraIncompleta: letras.join(''),
+            solucion: letraQuitada
+         };
       }
-      listaLetrasSelec = [];
    }
 
    useEffect(() => {
+
+      document.querySelector(".controles__next").disabled = true;
+
       function decodeHtmlEntities(input) {
          // Crear un elemento temporal para decodificar las entidades HTML
          //&quot; ----> "
@@ -284,7 +371,7 @@ export default function RevisarJuego({ alerta }) {
                const texto = normalizeSpaces(decodeHtmlEntities(definition));
                //Si el texto contiene alguna de estas palabras
                if (['Forma', 'persona del', 'femenino', 'masculino', 'singular', 'plural'].some(palabra => texto.includes(palabra))) {
-                  const seccionesTexto = texto.split(">.")[0].replace(/<\/span(?!>)/g,"</span>").split('de ');
+                  const seccionesTexto = texto.split(">.")[0].replace(/<\/span(?!>)/g, "</span>").split('de ');
                   let elementoCorrecto = seccionesTexto.find(elemento =>
                      elemento.includes("ar</span>") || elemento.endsWith("er</span>") || elemento.endsWith("ir</span>") && seccionesTexto.indexOf(elemento) != 0
                   );
@@ -312,21 +399,39 @@ export default function RevisarJuego({ alerta }) {
       };
 
       async function getDefinition(word) {
-         const palabraNormalizada = await getBaseForm(word);
-         try {
-            const response = await fetch(
-               `https://es.wiktionary.org/w/api.php?action=query&titles=${palabraNormalizada}&prop=extracts&format=json&origin=*`
-            );
+         const palabraNormalizada = esRondaEspecial ? word : await getBaseForm(word);
+         try {            
+            const url = esRondaEspecial ?
+            `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(word)}`:
+            `https://es.wiktionary.org/w/api.php?action=query&titles=${encodeURIComponent(palabraNormalizada)}&prop=extracts&format=json&origin=*`;
+            const response = await fetch(url);
             const data = await response.json();
+
+            if (esRondaEspecial) {
+               // Si la página es de desambiguación, buscar otra opción
+               if (data.description && data.description.toLowerCase().includes("desambiguación")) {
+                  const region = ciudadToRegion.get(word); //Pais o estado de eeuu
+                  let descripcion = await searchWikipedia(word+", "+region);
+                  if (!descripcion) {
+                  descripcion = await searchWikipedia(word+" ("+region+")");
+                  }
+                  const texto = `<ol><li>${descripcion.slice(0,1).toUpperCase()+descripcion.slice(1)}</li></ol>`
+               return descripcion ? [palabraNormalizada,texto] : [palabraNormalizada,"no se encontró una definición."];
+               }
+
+               const texto = `<ol><li>${data.description.slice(0,1).toUpperCase()+data.description.slice(1)}</li></ol>`
+               return [palabraNormalizada,texto];
+            }
             const page = Object.values(data.query.pages)[0];
 
             if (page?.extract) {
                const parser = new DOMParser();
                const htmlDoc = parser.parseFromString(page.extract, "text/html");
                const definition = htmlDoc.querySelector("dl").cloneNode(true).outerHTML.toString();
-               const modDef = definition.replace(/<dl>/g,"<ol>").replace(/<\/dl>/g,"</ol>").replace(/<dd>/g,"<li>").replace(/<\/dd>/g,"</li>");
+               const modDef = definition.replace(/<dl>/g, "<ol>").replace(/<\/dl>/g, "</ol>").replace(/<dd>/g, "<li>").replace(/<\/dd>/g, "</li>");
                const texto = normalizeSpaces(decodeHtmlEntities(modDef));
-               return texto ? [palabraNormalizada,texto] : [word,"no se encontró una definición."];
+               console.log(texto);
+               return texto ? [palabraNormalizada, texto] : [word, "no se encontró una definición."];
             }
          } catch {
             console.error("Error al procesar la solicitud");
@@ -334,13 +439,26 @@ export default function RevisarJuego({ alerta }) {
          }
       }
 
+      async function searchWikipedia(title) {
+         try {
+             const response = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+     
+             const data = await response.json();
+     
+             return data ? data.description : null;
+         } catch (error) {
+             console.error("Error en la búsqueda:", error);
+             return null;
+         }
+     }
+
       for (let i = 0; i < 5; i++) {
          document.querySelectorAll(".tabla__btn-info")[i].addEventListener("click", async function () {
             const palabra = palabras[i].replace(/_/g, letraSolucion);
             const texto = await getDefinition(palabra);
             const palabraNormalizada = texto[0];
             const definicion = texto[1];
-            alerta(`${palabra.toUpperCase()} ${palabra != palabraNormalizada ? `(${palabraNormalizada})`:""}\n ${definicion}`);
+            alerta(`${palabra.toUpperCase()} ${palabra != palabraNormalizada ? `(${palabraNormalizada})` : ""}\n ${definicion}`);
          });
       }
 
