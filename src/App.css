@@ -1073,8 +1073,8 @@ h3 {
   font-weight: bolder;
   border-bottom: 0.4vw solid var(--color-tablero);
   display: flex;
-  justify-content: flex-start;
-  padding-left: 15px;
+  justify-content: center;
+  padding-right: 15px;
   align-items: center;
   height: 100%;
 }
@@ -1585,7 +1585,6 @@ height: 10vh;
 .tabla__palabra {
   border-width: 0.2vw;
   font-size: min(6vh, 7vw);
-  justify-content: center;
 }
 .tabla__especial .tabla__palabra:last-child{
   border-width: 0.2vw;
