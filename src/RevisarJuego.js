@@ -297,7 +297,7 @@ export default function RevisarJuego({ alerta }) {
             palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
             solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
             vuelta++;
-            if (vuelta > 10000) {
+            if (vuelta > 500) {
                letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
             }
          }
