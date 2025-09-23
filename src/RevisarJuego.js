@@ -289,12 +289,17 @@ export default function RevisarJuego({ alerta }) {
          let dificultadRenglonActual = "";
          let palabraIncompleta;
          let palabraElegida;
+         let vuelta = 0;
          while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
             palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(palabraElegida[0]);
             dificultadRenglonActual = palabraElegida[2];
             palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
             solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
+            vuelta++;
+            if (vuelta > 10000) {
+               letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
+            }
          }
          cincoPalabras.push(palabraIncompleta);
          palabrasElegidas.push(palabraElegida[0]);

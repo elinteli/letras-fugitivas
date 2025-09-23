@@ -186,8 +186,7 @@ export default function Juego({ alerta }) {
       pausaTimer = false; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
       restablecerColoresLetras();
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
-
-      esRondaEspecial = (elegirNumeroAleatorio(6) == 0);
+      esRondaEspecial = (elegirNumeroAleatorio(4) == 0);
       /* esRondaEspecial = true;*/
       if (esRondaEspecial) { // 1/6 de probabilidad
          return getPalabrasEspeciales();
@@ -196,8 +195,10 @@ export default function Juego({ alerta }) {
       for (let i = 0; i < 5; i++) { //Encuentra cinco palabras
          let solucionPalabra = "";
          let palabraIncompleta;
-         let diccionario = modoJuegoEsClasico ? dicJsonClasico : ((elegirNumeroAleatorio(2)) ? dicJsonClasico : dicJsonExperto);
-         //Diccionario en clasico es facil y en experto hay 50/50 de que sea facil/dificil
+         let diccionario = modoJuegoEsClasico
+            ? dicJsonClasico
+            : (elegirNumeroAleatorio(10) < 8 ? dicJsonExperto : dicJsonClasico);
+         //Diccionario en clasico es facil y en experto hay 80/20 de que sea dificil/facil
          while ((letraSolucion !== solucionPalabra[0] && letraSolucion !== solucionPalabra[1]) || cincoPalabras.includes(palabraIncompleta)) { //Busca una palabra hasta que encuentre una que se pueda resolver con la letra solucion elegida y no sea repetida
             let conjuntoElegido = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(conjuntoElegido);
@@ -223,12 +224,17 @@ export default function Juego({ alerta }) {
          let dificultadRenglonActual = "";
          let palabraIncompleta;
          let palabraElegida;
-         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
+         let vuelta = 0;
+         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : false) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
             palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(palabraElegida[0]);
             dificultadRenglonActual = palabraElegida[2];
             palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
             solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
+            vuelta++;
+            if (vuelta > 10000) {
+               letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
+            }
          }
          cincoPalabras.push(palabraIncompleta);
          palabrasElegidas.push(palabraElegida[0]);
