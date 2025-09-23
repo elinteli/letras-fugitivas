@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import dicJsonClasico from './resources/dicClasico.json';
 import dicJsonExperto from './resources/dicExperto.json';
 import ciudades from './resources/ciudades.json';
+import seriestv from './resources/seriestv.json';
 import bopAudio from './sounds/bop.wav';
 import gameBonusAudio from './sounds/game-bonus-144751.mp3';
 import errorAudio from './sounds/notification-sound-error-sound-effect-203788.mp3';
@@ -123,7 +124,8 @@ export default function RevisarJuego({ alerta }) {
    function Controles() {
       return (
          <div className="controles">
-            <button class="controles__before" onClick={function () {
+            <button className="controles__start"></button>
+            <button className="controles__before" onClick={function () {
                // if (numRonda > 1) {
                   // if (numRonda-1 <= 1) {
                   //    console.log("minimo");
@@ -150,8 +152,8 @@ export default function RevisarJuego({ alerta }) {
                // }
             }
             }></button>
-            <div class="controles__num">{numRonda}</div>
-            <button class="controles__next" onClick={function () {
+            <div className="controles__num">{numRonda}</div>
+            <button className="controles__next" onClick={function () {
                // if (numRonda < rondaMax) {
                   // if (numRonda+1 > 1) {
                   //    // setIsBeforeDisabled(false);
@@ -176,6 +178,7 @@ export default function RevisarJuego({ alerta }) {
                // }
             }
             }></button>
+            <button className="controles__end"></button>
          </div>
       );
    }
@@ -191,7 +194,7 @@ export default function RevisarJuego({ alerta }) {
       else {
          const infoRonda = JSON.parse(localStorage.getItem("ronda-" + numRonda));
          palabras = infoRonda.palabras;
-         esRondaEspecial = palabras[0].includes("~");
+         esRondaEspecial = palabras[0].includes("Cultura General");
          letraSolucion = infoRonda.letraSolucion;
       }
       document.querySelector(".tabla").className = `tabla ${esRondaEspecial ? "tabla__especial" : ""}`;
@@ -209,7 +212,7 @@ export default function RevisarJuego({ alerta }) {
       pausaTimer = false; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
 
-      esRondaEspecial = (elegirNumeroAleatorio(10) == 0);
+      esRondaEspecial = (elegirNumeroAleatorio(2) == 0);
       if (esRondaEspecial) { // 1/10 de probabilidad
          return getPalabrasEspeciales(numRonda);
       }
@@ -236,16 +239,19 @@ export default function RevisarJuego({ alerta }) {
    }
 
    function getPalabrasEspeciales() {
-      const categoriaEspecial = "ciudades";
-      let cincoPalabras = [`~ ${categoriaEspecial} ~`]; // primera y ultima palabra es la categoria
+      generadorNumAleat = seedrandom(seed + "" + numRonda);
+      const categorias = [["ciudades",ciudades], ["series",seriestv]];
+      const indiceCat = elegirNumeroAleatorio(categorias.length);
+      const categoriaEspecial = categorias[indiceCat][0];
+      const diccionario = categorias[indiceCat][1];
+      let cincoPalabras = [`${categoriaEspecial.charAt(0).toUpperCase() + categoriaEspecial.slice(1)}`]; // primera y ultima palabra es la categoria
       let palabrasElegidas = []; //palabras pero completas, sin letras quitadas
       for (let i = 0; i < 3; i++) { // Encontrar tres palabras
          let solucionPalabra = "";
          let dificultadRenglonActual = "";
          let palabraIncompleta;
          let palabraElegida;
-         const diccionario = ciudades;
-         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
+         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
             palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(palabraElegida[0]);
             dificultadRenglonActual = palabraElegida[2];
@@ -255,7 +261,7 @@ export default function RevisarJuego({ alerta }) {
          cincoPalabras.push(palabraIncompleta);
          palabrasElegidas.push(palabraElegida[0]);
       }
-      cincoPalabras.push(`~ ${categoriaEspecial} ~`); // primera y ultima palabra es la categoria
+      cincoPalabras.push(``); // primera y ultima palabra es la categoria
       localStorage.setItem("ronda-" + numRonda, JSON.stringify({
          palabras: cincoPalabras,
          letraSolucion: letraSolucion
@@ -314,7 +320,7 @@ export default function RevisarJuego({ alerta }) {
       //CASO B: UNA PALABRA
       else {
          const letrasPermitidas = new Set(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"]);
-         const letras = conjunto.split('');
+         const letras = (conjunto+"").split('');
          const indicesPermitidos = letras
             .map((letra, i) => letrasPermitidas.has(letra.toLowerCase()) ? i : -1)
             .filter(i => i !== -1); //Indices en la palabra donde estan las letras permitidas

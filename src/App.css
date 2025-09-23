@@ -300,7 +300,9 @@ h1 {
 .cont-botones__btn--experto,
 .tabla__btn-info,
 .controles__before,
-.controles__next {
+.controles__next,
+.controles__end, 
+.controles__start  {
   background: url("./img/boton.png");
   background-repeat: repeat;
   background-size: 200px;
@@ -332,7 +334,9 @@ h1 {
 .cont-fondos__fondo:active,
 .tabla__btn-info:active,
 .controles__before:active,
-.controles__next:active {
+.controles__next:active,
+.controles__end:active, 
+.controles__start:active  {
   transform: translateY(4px);
   box-shadow: none;
 }
@@ -354,7 +358,9 @@ h1 {
 .tablero-info__helante:disabled,
 .tablero-info__cambio:disabled,
 .controles__before:disabled,
-.controles__next:disabled {
+.controles__next:disabled,
+.controles__end:disabled, 
+.controles__start:disabled  {
   background: url("./img/boton-apagado.png");
   color: #45200e;
 }
@@ -1380,22 +1386,37 @@ h3 {
   padding: 7vh 0;
   padding-bottom: 8vh;
 }
-.controles__before, .controles__next, .controles__num {
+.controles__before, .controles__next, .controles__num,.controles__start, .controles__end {
   display: flex;
 }
 .controles__before, .controles__next {
   width: 12vw;
   height: 12vw;
   border-radius: 100%;
+  margin: -2vw;
+}
+.controles__start, .controles__end {
+  width: 9vw;
+  height: 9vw;
+  font-size: 6.4vw;
+  border-radius: 5px;
 }
 .controles__before:before {
   font-family: 'fa-solid';
   content: "\f104";
 }
+.controles__start:before {
+  font-family: 'fa-solid';
+  content: "\f100";
+}
 
 .controles__next:before {
   font-family: 'fa-solid';
   content: "\f105";
+}
+.controles__end:before {
+  font-family: 'fa-solid';
+  content: "\f101";
 }
 
 .alerta ul li {
@@ -1419,6 +1440,12 @@ h3 {
     width: 5vw;
     height: 5vw;
     font-size: 2.5vw;
+    margin: 0;
+  }
+  .controles__end, .controles__start {
+    width: 4vw;
+    height: 4vw;
+    font-size: 2vw;
   }
   .controles__num {
     font-size: min(7.5vh, 10.5vw);
