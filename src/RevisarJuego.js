@@ -46,6 +46,9 @@ export default function RevisarJuego({ alerta }) {
    let configAbierto = false;
    let vidas = 3;
 
+   
+   let categoriaEspecial;
+
    const ciudadToRegion = new Map();
 
    ciudades.forEach(entry => {
@@ -136,10 +139,10 @@ export default function RevisarJuego({ alerta }) {
                   //    // setIsNextDisabled(false);
                   // }
 
-                  // console.log("------------------------------");
-                  // console.log("Antes", numRonda);
-                  // numRonda--;
-                  // console.log("Después (-)", numRonda);
+                  console.log("------------------------------");
+                  console.log("Antes", numRonda);
+                  numRonda--;
+                  console.log("Después (-)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda < rondaMax) { 
@@ -162,10 +165,10 @@ export default function RevisarJuego({ alerta }) {
                   //    console.log("maximo");
                   //    // setIsNextDisabled(true);
                   // }
-                  // console.log("------------------------------");
-                  // console.log("Antes", numRonda);
-                  // numRonda++;
-                  // console.log("Después (+)", numRonda);
+                  console.log("------------------------------");
+                  console.log("Antes", numRonda);
+                  numRonda++;
+                  console.log("Después (+)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda > 1) { 
@@ -183,21 +186,24 @@ export default function RevisarJuego({ alerta }) {
       );
    }
    function setPalabras() {
+      console.log(rondas);
       if (!rondas[numRonda]) {
          rondas[numRonda] = true;
          palabras = getPalabras();
          localStorage.setItem("ronda-" + numRonda, JSON.stringify({
             palabras: palabras,
-            letraSolucion: letraSolucion
+            letraSolucion: letraSolucion,
+            esRondaEspecial: esRondaEspecial
          }))
       }
       else {
          const infoRonda = JSON.parse(localStorage.getItem("ronda-" + numRonda));
          palabras = infoRonda.palabras;
-         esRondaEspecial = palabras[0].includes("Cultura General");
          letraSolucion = infoRonda.letraSolucion;
+         esRondaEspecial = infoRonda.esRondaEspecial;
       }
       document.querySelector(".tabla").className = `tabla ${esRondaEspecial ? "tabla__especial" : ""}`;
+      console.log(esRondaEspecial);
       for (let i = 0; i < 5; i++) {
          document.querySelectorAll(".tabla__palabra-div")[i].innerHTML = palabras[i].replace(/_/g, `<b>${letraSolucion}</b>`);
       }
@@ -233,7 +239,8 @@ export default function RevisarJuego({ alerta }) {
       }
       localStorage.setItem("ronda-" + numRonda, JSON.stringify({
          palabras: cincoPalabras,
-         letraSolucion: letraSolucion
+         letraSolucion: letraSolucion,
+         esRondaEspecial: esRondaEspecial
       }))
       return (cincoPalabras);
    }
@@ -242,7 +249,7 @@ export default function RevisarJuego({ alerta }) {
       generadorNumAleat = seedrandom(seed + "" + numRonda);
       const categorias = [["ciudades",ciudades], ["series",seriestv]];
       const indiceCat = elegirNumeroAleatorio(categorias.length);
-      const categoriaEspecial = categorias[indiceCat][0];
+      categoriaEspecial = categorias[indiceCat][0];
       const diccionario = categorias[indiceCat][1];
       let cincoPalabras = [`${categoriaEspecial.charAt(0).toUpperCase() + categoriaEspecial.slice(1)}`]; // primera y ultima palabra es la categoria
       let palabrasElegidas = []; //palabras pero completas, sin letras quitadas
@@ -264,7 +271,8 @@ export default function RevisarJuego({ alerta }) {
       cincoPalabras.push(``); // primera y ultima palabra es la categoria
       localStorage.setItem("ronda-" + numRonda, JSON.stringify({
          palabras: cincoPalabras,
-         letraSolucion: letraSolucion
+         letraSolucion: letraSolucion,
+         esRondaEspecial: esRondaEspecial
       }))
       return (cincoPalabras);
    }
@@ -284,7 +292,8 @@ export default function RevisarJuego({ alerta }) {
       rondas[numRonda] = true;
       localStorage.setItem("ronda-" + numRonda, JSON.stringify({
          palabras: palabras,
-         letraSolucion: letraSolucion
+         letraSolucion: letraSolucion,
+         esRondaEspecial: esRondaEspecial
       }))
       return (<ul className={`tabla ${esRondaEspecial ? "tabla__especial" : ""}`}>
          <li className="tabla__palabra"><div className="tabla__palabra-div">{palabras[0].split("_")[0]}{palabras[0].includes("_") ? <b>{letraSolucion}</b> : ""}{palabras[0].split("_")[1]}</div> <div className="tabla__btn-info"></div> </li>
