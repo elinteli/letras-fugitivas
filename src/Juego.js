@@ -211,7 +211,6 @@ export default function Juego({ alerta }) {
    }
 
    function getPalabrasEspeciales() {
-      console.log(numRonda);
       generadorNumAleat = seedrandom(seed + "" + numRonda);
       const categorias = [["ciudades",ciudades], ["series",seriestv]];
       const indiceCat = elegirNumeroAleatorio(categorias.length);
@@ -313,7 +312,6 @@ export default function Juego({ alerta }) {
       }
       //CASO B: UNA PALABRA
       else {
-         console.log(conjunto);
          const letrasPermitidas = new Set(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "l", "m", "n", "o", "p", "r", "s", "t"]);
          const letras = (conjunto+"").split('');
          const indicesPermitidos = letras

@@ -127,7 +127,20 @@ export default function RevisarJuego({ alerta }) {
    function Controles() {
       return (
          <div className="controles">
-            <button className="controles__start"></button>
+            <button className="controles__start" onClick={function () {
+                  numRonda = 1;
+                  document.querySelector(".controles__num").innerHTML = numRonda;
+                  generadorNumAleat = seedrandom(seed + "" + numRonda);
+                  if (numRonda < rondaMax) { 
+                     document.querySelector(".controles__next").disabled = false;
+                     document.querySelector(".controles__end").disabled = false;
+                  }
+                  if (numRonda <= 1) { 
+                     document.querySelector(".controles__before").disabled = true;
+                     document.querySelector(".controles__start").disabled = true;
+                  }
+                  setPalabras();
+            }}></button>
             <button className="controles__before" onClick={function () {
                // if (numRonda > 1) {
                   // if (numRonda-1 <= 1) {
@@ -139,17 +152,19 @@ export default function RevisarJuego({ alerta }) {
                   //    // setIsNextDisabled(false);
                   // }
 
-                  console.log("------------------------------");
-                  console.log("Antes", numRonda);
+                  // console.log("------------------------------");
+                  // console.log("Antes", numRonda);
                   numRonda--;
-                  console.log("Después (-)", numRonda);
+                  // console.log("Después (-)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda < rondaMax) { 
                      document.querySelector(".controles__next").disabled = false;
+                     document.querySelector(".controles__end").disabled = false;
                   }
                   if (numRonda <= 1) { 
                      document.querySelector(".controles__before").disabled = true;
+                     document.querySelector(".controles__start").disabled = true;
                   }
                   setPalabras();
                // }
@@ -165,23 +180,39 @@ export default function RevisarJuego({ alerta }) {
                   //    console.log("maximo");
                   //    // setIsNextDisabled(true);
                   // }
-                  console.log("------------------------------");
-                  console.log("Antes", numRonda);
+                  // console.log("------------------------------");
+                  // console.log("Antes", numRonda);
                   numRonda++;
-                  console.log("Después (+)", numRonda);
+                  // console.log("Después (+)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda > 1) { 
                      document.querySelector(".controles__before").disabled = false;
+                     document.querySelector(".controles__start").disabled = false;
                   }
                   if (numRonda >= rondaMax) { 
                      document.querySelector(".controles__next").disabled = true;
+                     document.querySelector(".controles__end").disabled = true;
                   }
                   setPalabras();
                // }
             }
             }></button>
-            <button className="controles__end"></button>
+            <button className="controles__end" onClick={function () {
+                  numRonda = rondaMax;
+                  document.querySelector(".controles__num").innerHTML = numRonda;
+                  generadorNumAleat = seedrandom(seed + "" + numRonda);
+                  if (numRonda > 1) { 
+                     document.querySelector(".controles__before").disabled = false;
+                     document.querySelector(".controles__start").disabled = false;
+                  }
+                  if (numRonda >= rondaMax) { 
+                     document.querySelector(".controles__next").disabled = true;
+                     document.querySelector(".controles__end").disabled = true;
+                  }
+                  setPalabras();
+            }
+            }></button>
          </div>
       );
    }
