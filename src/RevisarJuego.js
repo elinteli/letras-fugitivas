@@ -249,8 +249,8 @@ export default function RevisarJuego({ alerta }) {
       pausaTimer = false; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
 
-      esRondaEspecial = (elegirNumeroAleatorio(2) == 0);
-      if (esRondaEspecial) { // 1/10 de probabilidad
+      esRondaEspecial = (elegirNumeroAleatorio(6) == 0);
+      if (esRondaEspecial) { // 1/6 de probabilidad
          return getPalabrasEspeciales(numRonda);
       }
 

@@ -187,9 +187,9 @@ export default function Juego({ alerta }) {
       restablecerColoresLetras();
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
 
-      esRondaEspecial = (elegirNumeroAleatorio(2) == 0);
+      esRondaEspecial = (elegirNumeroAleatorio(6) == 0);
       /* esRondaEspecial = true;*/
-      if (esRondaEspecial) { // 1/10 de probabilidad
+      if (esRondaEspecial) { // 1/6 de probabilidad
          return getPalabrasEspeciales();
       } else {
       let cincoPalabras = []; //Array con las palabras que se van a mostrar
