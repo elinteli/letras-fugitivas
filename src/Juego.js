@@ -225,7 +225,7 @@ export default function Juego({ alerta }) {
          let palabraIncompleta;
          let palabraElegida;
          let vuelta = 0;
-         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : false) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
+         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
             palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(palabraElegida[0]);
             dificultadRenglonActual = palabraElegida[2];
