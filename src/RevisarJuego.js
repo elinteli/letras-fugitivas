@@ -258,8 +258,10 @@ export default function RevisarJuego({ alerta }) {
       for (let i = 0; i < 5; i++) { //Encuentra cinco palabras
          let solucionPalabra = "";
          let palabraIncompleta;
-         let diccionario = modoJuegoEsClasico ? dicJsonClasico : ((elegirNumeroAleatorio(2)) ? dicJsonClasico : dicJsonExperto);
-         //Diccionario en clasico es facil y en experto hay 50/50 de que sea facil/dificil
+         let diccionario = modoJuegoEsClasico
+            ? dicJsonClasico
+            : (elegirNumeroAleatorio(10) < 8 ? dicJsonExperto : dicJsonClasico);
+         //Diccionario en clasico es facil y en experto hay 80/20 de que sea facil/dificil
          while ((letraSolucion !== solucionPalabra[0] && letraSolucion !== solucionPalabra[1]) || cincoPalabras.includes(palabraIncompleta)) { //Busca una palabra hasta que encuentre una que se pueda resolver con la letra solucion elegida y no sea repetida
             let conjuntoElegido = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(conjuntoElegido);
@@ -290,7 +292,7 @@ export default function RevisarJuego({ alerta }) {
          let palabraIncompleta;
          let palabraElegida;
          let vuelta = 0;
-         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : dificultadRenglonActual < 7) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
+         while (letraSolucion !== solucionPalabra || palabrasElegidas.includes(palabraElegida[0]) || (modoJuegoEsClasico ? dificultadRenglonActual > 4 : false) || (palabraElegida[0].length > 11)) { //Busca una palabra hasta que encuentre una que sea con la letra solucion elegida y no sea repetida
             palabraElegida = diccionario[elegirNumeroAleatorio(diccionario.length)];
             let info = quitarLetra(palabraElegida[0]);
             dificultadRenglonActual = palabraElegida[2];
