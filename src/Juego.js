@@ -186,7 +186,7 @@ export default function Juego({ alerta }) {
       pausaTimer = false; //Hace que avance el tiempo (pausaTimer = true significa que el tiempo está pausado)
       restablecerColoresLetras();
       letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
-      esRondaEspecial = (elegirNumeroAleatorio(4) == 0);
+      esRondaEspecial = (elegirNumeroAleatorio(3) == 0);
       /* esRondaEspecial = true;*/
       if (esRondaEspecial) { // 1/6 de probabilidad
          return getPalabrasEspeciales();
