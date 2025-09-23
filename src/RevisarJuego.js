@@ -136,10 +136,10 @@ export default function RevisarJuego({ alerta }) {
                   //    // setIsNextDisabled(false);
                   // }
 
-                  console.log("------------------------------");
-                  console.log("Antes", numRonda);
-                  numRonda--;
-                  console.log("Después (-)", numRonda);
+                  // console.log("------------------------------");
+                  // console.log("Antes", numRonda);
+                  // numRonda--;
+                  // console.log("Después (-)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda < rondaMax) { 
@@ -162,10 +162,10 @@ export default function RevisarJuego({ alerta }) {
                   //    console.log("maximo");
                   //    // setIsNextDisabled(true);
                   // }
-                  console.log("------------------------------");
-                  console.log("Antes", numRonda);
-                  numRonda++;
-                  console.log("Después (+)", numRonda);
+                  // console.log("------------------------------");
+                  // console.log("Antes", numRonda);
+                  // numRonda++;
+                  // console.log("Después (+)", numRonda);
                   document.querySelector(".controles__num").innerHTML = numRonda;
                   generadorNumAleat = seedrandom(seed + "" + numRonda);
                   if (numRonda > 1) { 
