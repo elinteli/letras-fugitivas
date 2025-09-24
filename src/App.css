@@ -738,7 +738,7 @@ h1 {
   color: #45200e;
 }
 
-.cont-cred__enlace {
+.cont-cred__enlace, .alerta__enlace {
   color: #1f293c;
   text-decoration: underline;
 }

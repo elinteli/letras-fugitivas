@@ -232,9 +232,9 @@ export default function Juego({ alerta }) {
             palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
             solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
             vuelta++;
-            if (vuelta > 500) {
+            if (vuelta > 5000) {
                letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
-               console.log("CAMBIO DE LETRA");
+               return getPalabrasEspeciales(numRonda);
             }
          }
          console.log(vuelta);

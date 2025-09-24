@@ -299,8 +299,9 @@ export default function RevisarJuego({ alerta }) {
             palabraIncompleta = info.palabraIncompleta; //Palabra con incognita. Ej: "Com_r"
             solucionPalabra = info.solucion //Ejemplo: solucion es "a", "Pens_r" ---> "Pensar"
             vuelta++;
-            if (vuelta > 500) {
+            if (vuelta > 5000) {
                letraSolucion = letras[elegirNumeroAleatorio(letras.length)];
+               return getPalabrasEspeciales(numRonda);
             }
          }
          cincoPalabras.push(palabraIncompleta);
@@ -390,6 +391,7 @@ export default function RevisarJuego({ alerta }) {
    useEffect(() => {
 
       document.querySelector(".controles__next").disabled = true;
+      document.querySelector(".controles__end").disabled = true;
 
       function decodeHtmlEntities(input) {
          // Crear un elemento temporal para decodificar las entidades HTML
@@ -454,37 +456,51 @@ export default function RevisarJuego({ alerta }) {
       async function getDefinition(word) {
          const palabraNormalizada = esRondaEspecial ? word : await getBaseForm(word);
          try {            
-            const url = esRondaEspecial ?
-            `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(word)}`:
-            `https://es.wiktionary.org/w/api.php?action=query&titles=${encodeURIComponent(palabraNormalizada)}&prop=extracts&format=json&origin=*`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (esRondaEspecial) {
+            if (esRondaEspecial) { //BUSCAR PALABRA EN WIKIPEDIA
+               let linkWikipedia = `https://es.wikipedia.org/wiki/${word}`;
                // Si la página es de desambiguación, buscar otra opción
-               if (data.description && data.description.toLowerCase().includes("desambiguación")) {
-                  const region = ciudadToRegion.get(word); //Pais o estado de eeuu
-                  let descripcion = await searchWikipedia(word+", "+region);
-                  if (!descripcion) {
-                  descripcion = await searchWikipedia(word+" ("+region+")");
+
+                  let descripcion;
+                  //Buscar la ciudad en Wikipedia
+                  if (categoriaEspecial == "ciudades") {
+                     const region = ciudadToRegion.get(word); //Pais o estado de eeuu
+                     descripcion = await searchWikipedia(word+", "+region);
+                     linkWikipedia = `https://es.wikipedia.org/wiki/${word}, ${region}`;
+                     if (!descripcion) {
+                        descripcion = await searchWikipedia(word+" ("+region+")");
+                        linkWikipedia = `https://es.wikipedia.org/wiki/${word} (${region})`;
+
+                        if (!descripcion) {
+                           descripcion = await searchWikipedia(word);
+                           linkWikipedia = `https://es.wikipedia.org/wiki/${word}`;
+                        }
+                     }
+                  } 
+                  //Buscar la Serie en Wikipedia
+                  else if (categoriaEspecial == "series") {
+                     descripcion = await searchWikipedia(word+" (serie de televisión)");
+                     linkWikipedia = `https://es.wikipedia.org/wiki/${word} (serie de televisión)`;
+                     if (!descripcion) {
+                           descripcion = await searchWikipedia(word);
+                           linkWikipedia = `https://es.wikipedia.org/wiki/${word}`;
+                     }
                   }
                   const texto = `<ol><li>${descripcion.slice(0,1).toUpperCase()+descripcion.slice(1)}</li></ol>`
-               return descripcion ? [palabraNormalizada,texto] : [palabraNormalizada,"no se encontró una definición."];
+                  return descripcion ? [palabraNormalizada,texto, linkWikipedia] : [palabraNormalizada,"no se encontró una definición.",linkWikipedia];
+            } else { //BUSCAR PALABRA EN WIKTIONARY
+               const response = await fetch(`https://es.wiktionary.org/w/api.php?action=query&titles=${encodeURIComponent(palabraNormalizada)}&prop=extracts&format=json&origin=*`);
+               const data = await response.json();
+               const page = Object.values(data.query.pages)[0];
+
+               if (page?.extract) {
+                  const parser = new DOMParser();
+                  const htmlDoc = parser.parseFromString(page.extract, "text/html");
+                  const definition = htmlDoc.querySelector("dl").cloneNode(true).outerHTML.toString();
+                  const modDef = definition.replace(/<dl>/g, "<ol>").replace(/<\/dl>/g, "</ol>").replace(/<dd>/g, "<li>").replace(/<\/dd>/g, "</li>");
+                  const texto = normalizeSpaces(decodeHtmlEntities(modDef));
+                  console.log(texto);
+                  return texto ? [palabraNormalizada, texto, `https://es.wikitionary.org/wiki/${palabraNormalizada}`] : [word, "no se encontró una definición."];
                }
-
-               const texto = `<ol><li>${data.description.slice(0,1).toUpperCase()+data.description.slice(1)}</li></ol>`
-               return [palabraNormalizada,texto];
-            }
-            const page = Object.values(data.query.pages)[0];
-
-            if (page?.extract) {
-               const parser = new DOMParser();
-               const htmlDoc = parser.parseFromString(page.extract, "text/html");
-               const definition = htmlDoc.querySelector("dl").cloneNode(true).outerHTML.toString();
-               const modDef = definition.replace(/<dl>/g, "<ol>").replace(/<\/dl>/g, "</ol>").replace(/<dd>/g, "<li>").replace(/<\/dd>/g, "</li>");
-               const texto = normalizeSpaces(decodeHtmlEntities(modDef));
-               console.log(texto);
-               return texto ? [palabraNormalizada, texto] : [word, "no se encontró una definición."];
             }
          } catch {
             console.error("Error al procesar la solicitud");
@@ -511,7 +527,9 @@ export default function RevisarJuego({ alerta }) {
             const texto = await getDefinition(palabra);
             const palabraNormalizada = texto[0];
             const definicion = texto[1];
-            alerta(`${palabra.toUpperCase()} ${palabra != palabraNormalizada ? `(${palabraNormalizada})` : ""}\n ${definicion}`);
+            const webDef = esRondaEspecial ? "Wikipedia" : "Wiktionary";
+            const linkDef = `<a class="alerta__enlace" href="${texto[2]}" target="_blank" rel="noopener noreferrer">${webDef}<a>`
+            alerta(`${palabra.toUpperCase()} ${palabra != palabraNormalizada ? `(${palabraNormalizada})` : ""}\n ${definicion} \n ${linkDef}`);
          });
       }
 
